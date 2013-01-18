@@ -1,0 +1,19 @@
+doctype 5
+html
+  head
+    title= page.name.capitalize()
+    each element in page.elements
+      style(type='text/css')
+        ##{element.name} {
+          width:  #{element.width}px;
+          height: #{element.height}px;
+          top:    #{element.y}px;
+          left:   #{element.x}px;
+          position: absolute;
+          border: 1px solid;
+        }
+  body
+    each element in page.elements
+      div(id=element.name)
+
+
