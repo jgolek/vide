@@ -14,6 +14,9 @@ html
         }
   body
     each element in page.elements
-      div(id=element.name)
-
-
+      div(id=element.name, data-bind="with: #{element.name}PatternInstance")
+        - var pattern = includePattern(element.pattern, '      ')
+        !{pattern}
+  script
+    var bindings = buildPageBindings();
+    ko.applyBindings(bindings);

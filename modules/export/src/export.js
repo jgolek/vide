@@ -2,17 +2,27 @@ var yaml  = require('js-yaml'),
     async = require('async'),
     transform = require('../../transform/src/transform'),
     fse  = require('fs-extra'),
-    fs  = require('fs');
+    fs  = require('fs'),
+    FileSource = require('../../source/src/source-fs');
 
 /**
 	args
 */
 var argsDefinition = {
 	applicationFile: { require: true, type: 'string'},
+  patternDirectory: { require: true, type: 'string'},
 	outputDirectory: { require: true, type: 'string'}
-}
+};
 
-module.exports = function(args, callback){
+module.exports = function(args, callback) {
+
+  //args
+  var fileSourceArgs = {
+    directory : args.patternDirectory,
+    fileType: ".html",
+    toLowerCase: true
+  }
+  var patternSource = new FileSource(fileSourceArgs);
 
   async.waterfall([
       readApplicationDefinition,
@@ -42,7 +52,8 @@ module.exports = function(args, callback){
     console.log("transform");
 
     var transformArgs = {
-      page: application.page
+      page: application.page,
+      patternSource: patternSource
     }
 
     transform(transformArgs, callback);
