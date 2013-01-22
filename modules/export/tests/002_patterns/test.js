@@ -11,6 +11,8 @@ exports.testExportApplication = function(test){
 	var applicationDescribtionFile = __dirname + "/app_with_patterns.yml";
 	var exportOutputDirectory = __dirname + "/exported-app";
 	var patternDirectory = __dirname + "/patterns";
+	var modulesDirectory = __dirname + "/modules/client/";
+
 
 	async.series({
 		"exported": runExport,
@@ -18,7 +20,8 @@ exports.testExportApplication = function(test){
 		"expectedHtmlPage": getExpectedHtmlPage
 	}, testResults );
 
-	function testResults(err, results){
+	function testResults(err, results) {
+		console.log("err");
 		throwIfError(err);
 
 		var expectedHtmlPage = results.expectedHtmlPage;
@@ -44,7 +47,8 @@ exports.testExportApplication = function(test){
 		var exportConfig = {
 			applicationFile : applicationDescribtionFile,
 			patternDirectory: patternDirectory,
-			outputDirectory: exportOutputDirectory
+			outputDirectory: exportOutputDirectory,
+			modulesDirectory: modulesDirectory
 		};
 		xport(exportConfig, callback);
 	}
@@ -61,7 +65,8 @@ exports.testExportApplication = function(test){
 
 function throwIfError(err){
 	if(err){
-		console.log(err.stack)
+		console.log(err.stack);
+
 		throw new Error(err);
 	}
 }

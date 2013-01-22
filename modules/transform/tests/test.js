@@ -4,8 +4,10 @@ function PatternSource(){
 	var self  = this;
 
 	self.patterns = {
-		"Pattern1": "<span>\n  test\n</span>",
-		"Pattern2": "span \n  abc2"
+		"Pattern1.html": "<span>\n  test\n</span>",
+		"Pattern1.js": "function Pattern1(){};",
+		"Pattern2.html": "span \n  abc2",
+		"Pattern2.js": "function Pattern2(){};",
 	};
 
 	this.get = function(name){
@@ -20,7 +22,8 @@ exports.transformPage = function(test){
 			{ name: "element1",
 			  pattern: "Pattern1"
 			 },
-			{ name: "element2" }
+			{ name: "element2",
+			  pattern: "Pattern2" }
 		]
 	};
 
@@ -36,8 +39,8 @@ exports.transformPage = function(test){
 		//console.log(page.html);
 		//todo
 		console.log(page.js);
+		test.ok(page.js);
 		test.done();
-	}
+	};
 	//html and css paser for nodejs!
 };
-

@@ -1,8 +1,7 @@
 function List(model){
 	var self = this;
 	self.model = model;
-
-	if(!self.model.text){
-		self.model.text = "not set";
+	if(!self.model.items){
+		self.model.items = [1,2,3];
 	}
 }

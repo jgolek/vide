@@ -3,26 +3,34 @@ var yaml  = require('js-yaml'),
     transform = require('../../transform/src/transform'),
     fse  = require('fs-extra'),
     fs  = require('fs'),
+    path  = require('path'),
     FileSource = require('../../source/src/source-fs');
 
 /**
 	args
 */
 var argsDefinition = {
-	applicationFile: { require: true, type: 'string'},
-  patternDirectory: { require: true, type: 'string'},
-	outputDirectory: { require: true, type: 'string'}
+	applicationFile:  { require: true, type: 'string' },
+  patternDirectory: { require: true, type: 'string' },
+  modulesDirectory: { require: true, type: 'string' },
+	outputDirectory:  { require: true, type: 'string' }
 };
 
 module.exports = function(args, callback) {
 
   //args
-  var fileSourceArgs = {
+  var filePatternSourceArgs = {
     directory : args.patternDirectory,
-    fileType: ".html",
+    toLowerCase: true
+  };
+  var patternSource = new FileSource(filePatternSourceArgs);
+
+  var fileModulesSource = {
+    directory: args.modulesDirectory,
     toLowerCase: true
   }
-  var patternSource = new FileSource(fileSourceArgs);
+  var modulesSource = new FileSource(fileModulesSource);
+
 
   async.waterfall([
       readApplicationDefinition,
@@ -67,10 +75,33 @@ module.exports = function(args, callback) {
     function afterMakeOutputDirectory(err){
       if(err){ callback(err); return }
 
-      console.log("mkdir", args.outputDirectory);
+      var outputHtmlFile = args.outputDirectory + "/"+page.name+".html";
+      var outputJsFile   = args.outputDirectory + "/"+page.name+".js";
 
-      var outputFile = args.outputDirectory + "/"+page.name+".html";
-      fs.writeFile(outputFile, page.html, 'utf8', callback);
+      async.parallel(
+        [ 
+          saveFile(outputHtmlFile, page.html),
+          saveFile(outputJsFile,   page.js),
+          saveModule("knockout/knockout-2.1.0.js")
+        ],
+        callback
+      );
+
+      function saveFile(outputFile, data){
+        return function(callback){
+          fs.writeFile(outputFile, data, 'utf8', callback);
+        };
+      }
+
+      function saveModule(moduleName){
+        return function(callback){
+          var moduleFileName = args.outputDirectory + "/modules/" + moduleName;
+          fse.mkdirs(path.dirname(moduleFileName), afterMakeModuleDir);
+          function afterMakeModuleDir(err){
+            saveFile(moduleFileName, modulesSource.get(moduleName))(callback);
+          }          
+        }
+      }
     }
   }
 }

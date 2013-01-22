@@ -13,6 +13,6 @@ page:
       name: "element2"
       height: 100 
       width:  200
-      x:      155
-      y:      50
+      x:      50
+      y:      155
       pattern: 'List'
