@@ -17,7 +17,9 @@ exports.testExportApplication = function(test){
 	async.series({
 		"exported": runExport,
 		"exportedHtmlPage": getExportedHtmlPage,
-		"expectedHtmlPage": getExpectedHtmlPage
+		"expectedHtmlPage": getExpectedHtmlPage,
+		"exportedJsPage": getExportedJsPage,
+		"expectedJsPage": getExpectedJsPage
 	}, testResults );
 
 	function testResults(err, results) {
@@ -30,15 +32,25 @@ exports.testExportApplication = function(test){
 
 		test.equal(expectedHtmlPage, exportedHtmlPage, "Compares expected with exported html page" );
 
-		diff.diffLines(expectedHtmlPage, exportedHtmlPage).forEach(function(diffValue){
+		diff.diffLines(expectedHtmlPage, exportedHtmlPage).forEach(compare);
+
+
+		var expectedJsPage = results.expectedJsPage;
+		var exportedJsPage = results.exportedJsPage;
+		test.ok(expectedJsPage, "expectedJsPage is undefined");
+
+		test.equal(expectedJsPage, exportedJsPage, "Compares expected with exported js page" );
+
+		diff.diffLines(expectedJsPage, exportedJsPage).forEach(compare);
+
+		function compare(diffValue){
 			if(diffValue.added){
 				console.log("Get:\n", diffValue.value);
 			}
 			if(diffValue.removed){
 				console.log("Expected:\n", diffValue.value);
-			}
-			//console.log(diffValue);	
-		});
+			}			
+		}
 
 		test.done();
 	}
@@ -59,7 +71,14 @@ exports.testExportApplication = function(test){
 
 	function getExpectedHtmlPage(callback){
 		fs.readFile(__dirname + "/expected-app/page1.html", "utf8", callback);
-		//cons.jade(__dirname + "/expected-app/page1.jade", { pretty: true }, callback);
+	}
+
+	function getExportedJsPage(callback){
+		fs.readFile(exportOutputDirectory + "/page1.js", "utf8", callback);
+	}
+
+	function getExpectedJsPage(callback){
+		fs.readFile(__dirname + "/expected-app/page1.js", "utf8", callback);
 	}
 };
 

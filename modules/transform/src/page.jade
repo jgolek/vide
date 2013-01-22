@@ -2,16 +2,10 @@ doctype 5
 html
   head
     title= page.name.capitalize()
-    each element in page.elements
-      style(type='text/css')
-        ##{element.name} {
-          width:  #{element.width}px;
-          height: #{element.height}px;
-          top:    #{element.y}px;
-          left:   #{element.x}px;
-          position: absolute;
-          border: 1px solid;
-        }
+    - var cssElements = includeElementsCss(page.elements, '      ');
+    style(type='text/css')
+      !{cssElements}
+
     script(src='page1.js', type='text/javascript')
     script(src='modules/knockout/knockout-2.1.0.js', type='text/javascript')
   body

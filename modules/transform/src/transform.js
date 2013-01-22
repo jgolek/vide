@@ -34,9 +34,31 @@ module.exports = function(args, callback){
       return args.patternSource.get(patternName + ".html");
     }
 
+    function includeElements(elements){
+      var elementsCssLines = [];
+
+      elements.forEach(forElement);
+      function forElement(element){
+        var elementCssLines = [];
+        elementCssLines.add("#"+element.name+" {");
+        elementCssLines.add(  "  width:  "+element.width+"px;");
+        elementCssLines.add(  "  height: "+element.height+"px;");
+        elementCssLines.add(  "  top:    "+element.y+"px;");
+        elementCssLines.add(  "  left:   "+element.x+"px;");
+        elementCssLines.add(  "  position: absolute;");
+        elementCssLines.add(  "  border: 1px solid;");
+        elementCssLines.add("}");
+        elementsCssLines.add(elementCssLines.join("\n"));
+      }
+      return elementsCssLines.join("\n");
+    }
+
     cons.jade(
       __dirname + "/page.jade", 
-      { page: page, pretty: true, includePattern: prettyPrint(includePattern) }, 
+      { page: page, 
+        pretty: true, 
+        includePattern: prettyPrint(includePattern),
+        includeElementsCss: prettyPrint(includeElements) }, 
       callback 
     );
   }
@@ -78,7 +100,7 @@ module.exports = function(args, callback){
     pageBindingLines.add("  var bindings = {");
     pageBindingLines.add(bindingLines.join(",\n"));
     pageBindingLines.add("  }");
-    pageBindingLines.add("  return bindings");
+    pageBindingLines.add("  return bindings;");
     pageBindingLines.add("}");
 
     pageJsLines.add("");
