@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page1</title>
+    <style type="text/css">
+      
+      #element1 {
+        width:  200px;
+        height: 100px;
+        top:    5px;
+        left:   50px;
+        position: absolute;
+        border: 1px solid;
+      }
+      #element2 {
+        width:  200px;
+        height: 100px;
+        top:    155px;
+        left:   50px;
+        position: absolute;
+        border: 1px solid;
+      }
+      
+    </style>
+    <script src="page1.js" type="text/javascript"></script>
+    <script src="modules/knockout/knockout-2.1.0.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div id="element1" data-bind="with: element1PatternInstance">
+      <span data-bind="text: model.text"></span>
+    </div>
+    <div id="element2" data-bind="with: element2PatternInstance">
+      <ul data-bind="foreach: model.items">
+        <li>
+            <span data-bind="text: $data"> </span>
+        </li>
+      </ul>
+    </div>
+  </body>
+  <script>
+    var bindings = buildPageBindings();
+    ko.applyBindings(bindings);
+  </script>
+</html>
