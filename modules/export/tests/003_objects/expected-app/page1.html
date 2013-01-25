@@ -20,6 +20,22 @@
         position: absolute;
         border: 1px solid;
       }
+      #element3 {
+        width:  200px;
+        height: 100px;
+        top:    260px;
+        left:   50px;
+        position: absolute;
+        border: 1px solid;
+      }
+      #element4 {
+        width:  200px;
+        height: 100px;
+        top:    260px;
+        left:   350px;
+        position: absolute;
+        border: 1px solid;
+      }
       
     </style>
     <script src="page1.js" type="text/javascript"></script>
@@ -27,16 +43,29 @@
     <script src="modules/vide/repository.js" type="text/javascript"></script>
   </head>
   <body>
+    
     <div id="element1" data-bind="with: element1PatternInstance">
       <span data-bind="text: model.text"></span>
     </div>
+
     <div id="element2" data-bind="with: element2PatternInstance">
-      <ul data-bind="foreach: model.items">
-        <li>
-            <span data-bind="text: $data"> </span>
+      <span id="listheader" class="nav-header" data-bind="text: model.title || 'Header'">Header</span>
+      <ul id="listitems" class="nav nav-list" data-bind="foreach: model.items" style="height:100%; overflow:auto;">
+        <li data-bind="click: $parent.select, css:{active: $parent.pattern.selected() == $data}">
+          <a ><span data-bind="text: $data"></span></a>
         </li>
       </ul>
     </div>
+    
+    <div id="element3" data-bind="with: element3PatternInstance">
+      <input data-bind="value: model.text()"></input>
+      <span data-bind="text: paint"></span>
+    </div>
+    
+    <div id="element4" data-bind="with: element4PatternInstance">
+      <span data-bind="text: model.text()"></span>
+    </div>
+
   </body>
   <script>
     var bindings = buildPageBindings();

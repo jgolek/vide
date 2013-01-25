@@ -10,8 +10,15 @@ function Repository(data){
 			if(cache[name]) {
 				return cache[name];
 			} else {
-				var typeData = new RepositoryData(data[name], self );
-				var typeObs = ko.observable(new Type(typeData));
+				var type = null;
+				if(Type){
+					var typeData = new RepositoryData(data[name], self );
+					type = new Type(typeData);
+				} else {
+					type = data[name];
+				}
+				console.log(name, type);
+				var typeObs = ko.observable(type);
 				cache[name] = typeObs;
 				return typeObs;					
 			}
@@ -22,10 +29,10 @@ function Repository(data){
 			} else {
 				var array = data[name];
 				var arrayWithTypes = [];
-				for(var i; i < array.length; i++){
+				for(var i=0; i < array.length; i++){
 					var typeData = new RepositoryData(array[i], self );
-					var type = new Type(typeData));
-					arrayWithTypes.add(type);
+					var type = new Type(typeData);
+					arrayWithTypes.push(type);
 				}
 				var arrayObs = ko.observableArray(arrayWithTypes);
 				cache[name] = arrayObs;

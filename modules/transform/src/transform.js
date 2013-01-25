@@ -11,7 +11,7 @@ function init(){
 
 var argsDefinition = {
 	page:          { type: 'object', require: true },
-  patternSource: { type: "object" }
+  patternSource: { type: 'Source' }
 };
 
 var patternDirectory = undefined;
