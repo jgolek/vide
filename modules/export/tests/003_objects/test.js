@@ -8,7 +8,7 @@ var xport = require("../../src/export"),
 
 exports.testExportApplication = function(test){
 
-	var applicationDescribtionFile = __dirname + "/app_with_patterns.yml";
+	var applicationDescribtionFile = __dirname + "/app.yml";
 	var exportOutputDirectory = __dirname + "/exported-app";
 	var patternDirectory = __dirname + "/patterns";
 	var modulesDirectory = __dirname + "/modules/client/";

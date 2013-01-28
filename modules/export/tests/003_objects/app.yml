@@ -1,0 +1,47 @@
+name: 'testapp'
+page: 
+  name: 'page1'
+  elements: 
+    - 
+      name: 'element1'
+      height: 100 
+      width:  200
+      x:      50
+      y:      5
+      pattern: 'Textoutput'
+      patterndata: 
+         text: 'domain:housemanagement/manager/name'
+    - 
+      name: "element2"
+      height: 100 
+      width:  200
+      x:      50
+      y:      155
+      pattern: 'List'
+      patterndata: 
+         items: 'domain:housemanagement/houses'
+    - 
+      name: "element3"
+      height: 100 
+      width:  200
+      x:      260
+      y:      155
+      pattern: 'Textinput'
+      patterndata: 
+         text: 'element:element2/selected/name'
+    - 
+      name: "element4"
+      height: 100 
+      width:  200
+      x:      260
+      y:      350
+      pattern: 'Textoutput'
+      patterndata: 
+         text: 'element:element2/selected/name'
+
+  requiredObjects: #root properties
+    housemanagement: 'Housemanagement'
+
+
+
+

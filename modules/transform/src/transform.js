@@ -2,11 +2,9 @@ var cons  = require('consolidate'),
     async = require('async'),
     sugar = require('sugar');
 
-// preload global variables
-init();
-
-function init(){
-
+var transfomers = {
+  toHtml : require('transfomers/to-page-html'),
+  toJs : require('transfomers/to-page-js')
 }
 
 var argsDefinition = {
@@ -18,7 +16,7 @@ var patternDirectory = undefined;
 module.exports = function(args, callback){
 
   var page = args.page; 
-  patternDirectory = args.patternDirectory;
+  var patternDirectory = args.patternDirectory;
 
   async.parallel(
     {
@@ -29,38 +27,23 @@ module.exports = function(args, callback){
   );
 
   function buildPageHtml(callback){
-
-    function includePattern(patternName){
-      return args.patternSource.get(patternName + ".html");
+    
+    var args = {
+      page: page,
+      patternSource: args.patternSource
     }
 
-    function includeElements(elements){
-      var elementsCssLines = [];
+    transfomers.toHtml(args, callback);
+  }
 
-      elements.forEach(forElement);
-      function forElement(element){
-        var elementCssLines = [];
-        elementCssLines.add("#"+element.name+" {");
-        elementCssLines.add(  "  width:  "+element.width+"px;");
-        elementCssLines.add(  "  height: "+element.height+"px;");
-        elementCssLines.add(  "  top:    "+element.y+"px;");
-        elementCssLines.add(  "  left:   "+element.x+"px;");
-        elementCssLines.add(  "  position: absolute;");
-        elementCssLines.add(  "  border: 1px solid;");
-        elementCssLines.add("}");
-        elementsCssLines.add(elementCssLines.join("\n"));
-      }
-      return elementsCssLines.join("\n");
+  function buildPageJs(callback){
+    
+    var args = {
+      page: page,
+      patternSource: args.patternSource
     }
 
-    cons.jade(
-      __dirname + "/page.jade", 
-      { page: page, 
-        pretty: true, 
-        includePattern: prettyPrint(includePattern),
-        includeElementsCss: prettyPrint(includeElements) }, 
-      callback 
-    );
+    transfomers.toJs(args, callback);
   }
 
   function buildPageJs(callback){
@@ -117,22 +100,3 @@ module.exports = function(args, callback){
     callback(err, page);
   }
 }
-
-function prettyPrint(get){
-  return function(name, prefix){
-    if(!prefix){
-      prefix = "";
-    }
-    var content = get(name);
-    if(!content) return "";
-
-    var prettyContent = "\n";
-    content.split("\n").forEach(function(line, index, array){
-      prettyContent += prefix + line;
-      if(index < (array.length - 1) ){
-        prettyContent += "\n";       
-      }
-    });
-    return prettyContent;
-  }
-};

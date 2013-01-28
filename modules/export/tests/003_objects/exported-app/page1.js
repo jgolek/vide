@@ -14,56 +14,25 @@ function List(model){
   }
 }
 
-function HouseManagement(data){
+function Textoutput(model){
   var self = this;
-  self.house   = data.getList('houses', House);
-  self.manager = data.get('manager', Manager);
+  self.model = model;
+  if(!self.model.text){
+    self.model.text = "not set";
+  }
 }
 
-function House(data){
-  var self = this;
-  self.address = data.get('address', 'String');
-}
-
-function Person(data){
-  var self = this;
-  self.name = data.get('name', 'String');
-}
 
 function buildPageBindings(){
-
-  var repository = new Repository(
-    {
-      "housemanagement": {
-        "houses": [ {
-          "address" : "abc street 1"
-        },
-        {
-          "address" : "abc street 2"
-        }],
-        "manager": {
-          "name" : "Hans Ditrich" 
-        }
-      }
-    }
-  );
-
-  var housemanagement = repository.get('housemanagement', HouseManagement);
-
-  var textoutput = new Textoutput(
-    {
-      "text": housemanagement.manager().name;
-    }
-  );
-
-  var list = new List(
-    {
-      "items": housemanagement.houses;
-    }
-  );
+  var textoutput = new Textoutput({});
+  var list = new List({});
+  var textinput = new Textinput({});
+  var textoutput = new Textoutput({});
   var bindings = {
     "element1PatternInstance": textoutput,
-    "element2PatternInstance": list
+    "element2PatternInstance": list,
+    "element3PatternInstance": textinput,
+    "element4PatternInstance": textoutput
   }
   return bindings;
 }
