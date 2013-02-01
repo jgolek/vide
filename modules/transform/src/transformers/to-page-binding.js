@@ -66,9 +66,40 @@ function buildPageBindingLines(args) {
 
 function buildPatternBindings(elements){
 
-  var bindings = elements.map(elementToBinding);
-  var lines = bindings.map(buildPatternBindingString);
+  var bindingsArray = elements.map(elementToBinding);
+
+  var bindings = {};
+  bindingsArray.forEach(function(binding){
+    bindings[binding.name] = binding;
+  });
+
+  var lines = bindingsArray.map(buildPatternBindingString);
   return lines.join("\n\n");
+
+  function buildPatternBindingString(binding){
+    var lines = [];
+
+    lines.push("var " + binding.patternVar + " = new " + binding.patternName + "({" );
+
+    var patternBindings = [];
+    for(var patternInputProperty in binding.patterndata){
+      var patterndata = binding.patterndata[patternInputProperty];
+      if(patterndata.type == 'static'){
+        patternBindings.push("  '" + patternInputProperty + "': '"+patterndata.value+"'" );
+      } else if( patterndata.type == 'domain' ) {
+        var value = patterndata.value.split(".").join("().");
+        patternBindings.push("  '" + patternInputProperty + "': "+value );
+      } else if( patterndata.type == 'element' ) {
+        var referenceBinding = bindings[patterndata.value];
+        patternBindings.push("  '" + patternInputProperty + "': "+referenceBinding.patternVar );
+      } else {
+        throw new Error("unknown type " + patterndata.type);
+      }
+    }
+    lines.push(patternBindings.join(",\n"));
+    lines.push("});");
+    return lines.join("\n");
+  }
 }
 
 function elementToBinding(element){
@@ -78,27 +109,11 @@ function elementToBinding(element){
     patternName: patternName,
     patternVar: patternName.toLowerCase() + "For" + element.name.capitalize(), 
     elementName: element.name + "PatternInstance",
-    patterndata : element.patterndata
+    patterndata : element.patterndata,
+    name: element.name
   };
 
   return binding;
-}
-
-function buildPatternBindingString(binding){
-  var lines = [];
-
-  lines.push("var " + binding.patternVar + " = new " + binding.patternName + "({" );
-
-  var patternBindings = [];
-  for(var patternInputProperty in binding.patterndata){
-    var patterndata = binding.patterndata[patternInputProperty];
-    if(patterndata.type == 'static'){
-      patternBindings.push("  '" + patternInputProperty + "': '"+patterndata.value+"'" );
-    }
-  }
-  lines.push(patternBindings.join(",\n"));
-  lines.push("});");
-  return lines.join("\n");
 }
 
 function buildRepositoryLines(data){

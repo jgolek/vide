@@ -6,7 +6,9 @@ exports.testToJs = function(test){
 		  x: 100,
 		  pattern: "Pattern1",
 		  patterndata: {
-		  	text: { type: "static", value: "demodata" }
+		  	text1: { type: "static", value: "demodata" },
+		  	text2: { type: "domain", value: "demo.app" },
+		  	text3: { type: "element", value: "element2" }
 		  }
 		},
 		{ name: "element2",

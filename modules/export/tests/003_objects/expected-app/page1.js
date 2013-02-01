@@ -121,7 +121,6 @@ function buildPageBindings(){
     "element2PatternInstance": listForElement2,
     "element3PatternInstance": textoutputForElement3,
     "element4PatternInstance": textoutputForElement4
-
   }
 
   return bindings;
