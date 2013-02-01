@@ -39,8 +39,7 @@ page:
       patterndata: 
          text: 'element:element2/selected/name'
 
-  requiredObjects: #root properties
-    housemanagement: 'Housemanagement'
+
 
 
 

@@ -1,37 +1,55 @@
+var async = require('async');
 
-var toPatterns = require('to-page-patterns');
-var toObjects = require('to-page-objects');
-var toElementBindings = require('to-page-element-bindings');
-var toPageBindings = require('to-page-bindings');
+var toPatterns = require('./to-page-patterns');
+var toObjects = require('./to-page-objects');
+var toPageBindings = require('./to-page-binding');
 
-module.exports = function(args, callback){
+module.exports = function(globalArgs, callback){
 
-	async.pararell(
+	async.parallel(
 		{
 			patterns:        buildPatterns,
 			objects:         buildObjects,
-			elementBindings: buildElementBindings,
 			pageBindings:    buildPageBindings
 		}, 
 	  buildPageJs
 	);
 
 	function buildPageJs(err, result){
-		var pageJs = "//header";
-		pageJs += result.patterns;
-		pageJs += result.objects;
-		pageJs += result.elementBindings;
-		pageJs += result.pageBindings;
+		var pageJs = "//header\n";
+		pageJs += result.patterns+"\n";
+		pageJs += result.objects+"\n";
+		pageJs += result.elementBindings+"\n";
+		pageJs += result.pageBindings+"\n";
 
 		callback(err, pageJs);
 	}
 
-
 	function buildPatterns(callback){
+		var args = {
+			elements: globalArgs.page.elements,
+			patternSource: globalArgs.patternSource
+		}
 
-		
-		
+		toPatterns(args, callback);
 	}
 
+	function buildObjects(callback){
+		var args = {
+			elements: globalArgs.page.elements,
+			patternSource: globalArgs.patternSource
+		}
+
+		toObjects(args, callback);
+	}
+
+	function buildPageBindings(callback){
+		var args = {
+			elements: globalArgs.page.elements,
+			data: globalArgs.data
+		}
+
+		toPageBindings(args, callback);
+	}
 
 }

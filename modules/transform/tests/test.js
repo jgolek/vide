@@ -27,17 +27,20 @@ exports.transformPage = function(test){
 		]
 	};
 
-	var app = {
+	var args = {
 		page : page,
-	 	patternSource: new PatternSource()
+	 	patternSource: new PatternSource(),
+	 	data: { "test": "test"}
 	};
 
-	transform( app, afterTransform );
+	transform( args, afterTransform );
 
 	function afterTransform(err, page){
-		console.log(err);
+		console.log("DONE");
+		console.log("Error:", err);
 		//console.log(page.html);
 		//todo
+		console.log("PageJs:");
 		console.log(page.js);
 		test.ok(page.js);
 		test.done();

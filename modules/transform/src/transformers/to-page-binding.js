@@ -1,38 +1,116 @@
+require('sugar'); 
+
+var bindingType = {
+  patternName: 'String',
+  patternVar: 'String',
+  elementName: 'String',
+  objectBinding: 'object'
+}
+
+var patterndataType = {
+  'key': {type: 'string', value: 'string'}
+}
+/* types: 
+  static: 'valueabc',
+  object: housemanagement/manager/name,
+  element: elemen1/selected/name,
+  site: page1/subpage1
+  pageurl: parament1 
+*/
+
+var elementType = {
+  pattern: { type: 'string'},
+  patterndata: {type: 'object'},
+  name: { type: 'name'}
+}
+
 var argsDefinition = {
-	elements: {}
+	elements: {},
+  data: { type: 'object' }
 };
 
 module.exports = function(args, callback){
 
-  var bindings = [];
-  args.elements.forEach(forElement);
-  function forElement(element){
-    var patternName = element.pattern;
-    var binding = {
-      patternName: patternName,
-      patternVar: patternName.toLowerCase(), 
-      elementName: element.name + "PatternInstance",
-    }
-    bindings.add(binding);
-  }
+  var pagebindingLines = [];
+  pagebindingLines.push("function buildPageBindings(){" + "\n");
+
+  pagebindingLines.push(indent(buildRepositoryLines(args.data), '  ') + "\n" );
+  pagebindingLines.push(indent(buildBindingLines(args), '  ') + "\n" );
+  pagebindingLines.push(indent(buildPageBindingLines(args), '  '));
+  pagebindingLines.push("}");
+
+  callback(null, pagebindingLines.join("\n"));
+}
+
+function buildBindingLines(args){
 
   var bindingLines = [];
-  bindingLines.add("function buildPageBindings(){");
-  var varLines = [];
-  var bindingLines = [];
+  bindingLines.push(buildPatternBindings(args.elements));
 
+  return bindingLines.join("\n");  
+}
+
+
+function buildPageBindingLines(args) {
+  var content = "var bindings = {\n";
+
+  var lines = [];
+  var bindings = args.elements.map(elementToBinding);
   bindings.forEach(function(binding){
-    varLines.add("  var " + binding.patternVar + " = new " + binding.patternName + "({});");
-    bindingLines.add('    "'+binding.elementName+'": '+binding.patternVar);
+    lines.push("  '" + binding.elementName + "': " + binding.patternVar);
   });
+  content += lines.join(",\n") + "\n";
+  content += "};";
+  return content;
+}
 
-  bindingLines.add(varLines.join("\n"));
-  bindingLines.add("  var bindings = {");
-  bindingLines.add(bindingLines.join(",\n"));
-  bindingLines.add("  }");
-  bindingLines.add("  return bindings;");
-  bindingLines.add("}");
+function buildPatternBindings(elements){
 
-  callback(null, bindingLines.join("\n"));
+  var bindings = elements.map(elementToBinding);
+  var lines = bindings.map(buildPatternBindingString);
+  return lines.join("\n\n");
+}
 
+function elementToBinding(element){
+  var patternName = element.pattern;
+    
+  var binding = {
+    patternName: patternName,
+    patternVar: patternName.toLowerCase() + "For" + element.name.capitalize(), 
+    elementName: element.name + "PatternInstance",
+    patterndata : element.patterndata
+  };
+
+  return binding;
+}
+
+function buildPatternBindingString(binding){
+  var lines = [];
+
+  lines.push("var " + binding.patternVar + " = new " + binding.patternName + "({" );
+
+  var patternBindings = [];
+  for(var patternInputProperty in binding.patterndata){
+    var patterndata = binding.patterndata[patternInputProperty];
+    if(patterndata.type == 'static'){
+      patternBindings.push("  '" + patternInputProperty + "': '"+patterndata.value+"'" );
+    }
+  }
+  lines.push(patternBindings.join(",\n"));
+  lines.push("});");
+  return lines.join("\n");
+}
+
+function buildRepositoryLines(data){
+  var lines = [];
+  lines.push("var repository = new Repository(");
+  lines.push(indent(JSON.stringify(data, null , "  "), "  "));
+  lines.push(");");
+  return lines.join("\n");
+}
+
+function indent(value, spaces){
+  var lines = value.split("\n");
+  var indentedLines = lines.map(function(line){return spaces + line});
+  return indentedLines.join("\n");
 }
