@@ -81,6 +81,8 @@ function buildPatternBindings(elements){
 
     lines.push("var " + binding.patternVar + " = new " + binding.patternName + "({" );
 
+    var selectables = [];
+
     var patternBindings = [];
     for(var patternInputProperty in binding.patterndata){
       var patterndata = binding.patterndata[patternInputProperty];
@@ -90,14 +92,32 @@ function buildPatternBindings(elements){
         var value = patterndata.value.split(".").join("().");
         patternBindings.push("  '" + patternInputProperty + "': "+value );
       } else if( patterndata.type == 'element' ) {
-        var referenceBinding = bindings[patterndata.value];
-        patternBindings.push("  '" + patternInputProperty + "': "+referenceBinding.patternVar );
+        var valueChain = patterndata.value.split(".");
+        var referenceElementName = valueChain[0];
+        var referenceBinding = bindings[referenceElementName];
+        valueChain.shift();
+        patternBindings.push("  '" + patternInputProperty + "': "+referenceBinding.patternVar + "." + valueChain.join('().'));
+
+        //TODO: rewrite this!
+        var dataValue = valueChain.length > 1 ? "data."+valueChain.pop() : "data";
+        selectables.push({
+          subscribePath: referenceBinding.patternVar+".pattern."+valueChain[0],
+          referencePath: binding.patternVar + ".model."+patternInputProperty+"("+dataValue+");"
+        });
       } else {
         throw new Error("unknown type " + patterndata.type);
       }
     }
     lines.push(patternBindings.join(",\n"));
     lines.push("});");
+
+    selectables.forEach(function(selectable){
+      lines.push(selectable.subscribePath +".subscribe(function(data){");
+      lines.push("  "+selectable.referencePath);
+      lines.push("});");
+      lines.push("");
+    });
+
     return lines.join("\n");
   }
 }
