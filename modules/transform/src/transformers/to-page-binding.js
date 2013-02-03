@@ -26,18 +26,22 @@ var elementType = {
 
 var argsDefinition = {
 	elements: {},
-  data: { type: 'object' }
+  data: { type: 'object' },
+  pageObjects: { type: 'array' }
 };
 
 module.exports = function(args, callback){
 
   var pagebindingLines = [];
   pagebindingLines.push("function buildPageBindings(){" + "\n");
-
   pagebindingLines.push(indent(buildRepositoryLines(args.data), '  ') + "\n" );
+  pagebindingLines.push(indent(buildRootObjectVars(args.pageObjects), '  ') + "\n" );
+
   pagebindingLines.push(indent(buildBindingLines(args), '  ') + "\n" );
   pagebindingLines.push(indent(buildPageBindingLines(args), '  '));
   pagebindingLines.push("}");
+
+  console.log(pagebindingLines.join("\n"));
 
   callback(null, pagebindingLines.join("\n"));
 }
@@ -83,18 +87,26 @@ function buildPatternBindings(elements){
 
     var selectables = [];
 
+    var rootObjects = [];
+
     var patternBindings = [];
     for(var patternInputProperty in binding.patterndata){
+      console.log(binding);
       var patterndata = binding.patterndata[patternInputProperty];
       if(patterndata.type == 'static'){
         patternBindings.push("  '" + patternInputProperty + "': '"+patterndata.value+"'" );
       } else if( patterndata.type == 'domain' ) {
+
         var value = patterndata.value.split(".").join("().");
         patternBindings.push("  '" + patternInputProperty + "': "+value );
       } else if( patterndata.type == 'element' ) {
         var valueChain = patterndata.value.split(".");
         var referenceElementName = valueChain[0];
         var referenceBinding = bindings[referenceElementName];
+        console.log(referenceBinding);
+        if(!referenceBinding){
+          throw new Error("Reference is missing: " + referenceElementName);
+        }
         valueChain.shift();
         patternBindings.push("  '" + patternInputProperty + "': "+referenceBinding.patternVar + "." + valueChain.join('().'));
 
@@ -108,6 +120,7 @@ function buildPatternBindings(elements){
         throw new Error("unknown type " + patterndata.type);
       }
     }
+
     lines.push(patternBindings.join(",\n"));
     lines.push("});");
 
@@ -141,6 +154,14 @@ function buildRepositoryLines(data){
   lines.push("var repository = new Repository(");
   lines.push(indent(JSON.stringify(data, null , "  "), "  "));
   lines.push(");");
+  return lines.join("\n");
+}
+
+function buildRootObjectVars(rootObjects){
+  var lines = [];
+  rootObjects.forEach(function(rootObject){
+    lines.push("var "+rootObject.name+" = repository.get( '"+rootObject.name+"', "+rootObject.type + ");");
+  });
   return lines.join("\n");
 }
 

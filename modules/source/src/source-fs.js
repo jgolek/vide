@@ -1,4 +1,8 @@
 var fs = require('fs');
+var path = require('path');
+
+var async = require('async');
+
 
 var argsDefinition = {
 	directory: {},
@@ -16,4 +20,32 @@ module.exports = function(args){
 		}
 		return fs.readFileSync(fileName, "utf8");
 	}
+
+	self.all = function(callback){
+		fs.readdir(args.directory, afterReadDir);
+
+		function afterReadDir(err, files){
+			console.log(files);
+
+			async.map(files, mapFileToObject, callback);
+
+			function mapFileToObject(file, callback){
+
+				console.log(file);
+				fs.readFile(args.directory + "/"+file, 'utf8', afterRead);
+
+				function afterRead(err, fileContent){
+					var fileParts = file.split(".");
+					var name = fileParts[0];
+					var type = fileParts[1];
+					var result = {};
+
+					result.name = name;
+					result[type] = fileContent;
+					callback(err, result);					
+				};
+			}
+		}
+	}
+
 }

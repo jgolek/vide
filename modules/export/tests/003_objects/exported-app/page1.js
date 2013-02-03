@@ -1,3 +1,4 @@
+//header
 function Textoutput(model){
   var self = this;
   self.model = model;
@@ -22,17 +23,81 @@ function Textoutput(model){
   }
 }
 
+function House(url, repository){
+	var self = this;
+
+	self.persons = repository.getList(url + "/persons", Person);
+	self.housemanagement = repository.getReference(url + "/housemanagement", Housemanagement);
+
+
+
+}
+function Housemanagement(data){
+
+	var self = this;
+	self.houses = data.houses; //should be observable
+	self.mananger = data.manager; //aggregate
+
+
+
+}
+function Person(url, repository){
+	var self = this;
+
+	self.name = ko.observable();
+
+}
 
 function buildPageBindings(){
-  var textoutput = new Textoutput({});
-  var list = new List({});
-  var textinput = new Textinput({});
-  var textoutput = new Textoutput({});
+
+  var repository = new Repository(
+    {
+      "housemanagement": {
+        "houses": [
+          {
+            "address": "abc street 1"
+          },
+          {
+            "address": "abc street 2"
+          }
+        ],
+        "manager": {
+          "name": "Hans Ditrich"
+        }
+      }
+    }
+  );
+
+  var housemanagement = repository.get( 'housemanagement', HouseManagement);
+
+  var textoutputForElement1 = new Textoutput({
+    'text': housemanagement().manager().name
+  });
+  
+  var listForElement2 = new List({
+    'items': housemanagement().houses
+  });
+  
+  var textinputForElement3 = new Textinput({
+    'text': listForElement2.selected().name
+  });
+  listForElement2.pattern.selected.subscribe(function(data){
+    textinputForElement3.model.text(data.name);
+  });
+  
+  
+  var textoutputForElement4 = new Textoutput({
+    'text': listForElement2.selected().name
+  });
+  listForElement2.pattern.selected.subscribe(function(data){
+    textoutputForElement4.model.text(data.name);
+  });
+  
+
   var bindings = {
-    "element1PatternInstance": textoutput,
-    "element2PatternInstance": list,
-    "element3PatternInstance": textinput,
-    "element4PatternInstance": textoutput
-  }
-  return bindings;
+    'element1PatternInstance': textoutputForElement1,
+    'element2PatternInstance': listForElement2,
+    'element3PatternInstance': textinputForElement3,
+    'element4PatternInstance': textoutputForElement4
+  };
 }

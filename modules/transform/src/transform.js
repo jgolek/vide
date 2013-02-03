@@ -12,11 +12,7 @@ var argsDefinition = {
   patternSource: { type: 'Source' }
 };
 
-var patternDirectory = undefined;
 module.exports = function(args, callback){
-
-  var page = args.page; 
-  var patternDirectory = args.patternDirectory;
 
   async.parallel(
     {
@@ -28,12 +24,7 @@ module.exports = function(args, callback){
 
   function buildPageHtml(callback){
     
-    var toHtmlArgs = {
-      page: page,
-      patternSource: args.patternSource
-    }
-
-    transfomers.toHtml(toHtmlArgs, callback);
+    transfomers.toHtml(args, callback);
   }
 
   function buildPageJs(callback){
@@ -42,6 +33,7 @@ module.exports = function(args, callback){
   }
 
   function returnResult(err, results){
+    var page = args.page;
     page.html = results.html;
     page.js   = results.js;
     callback(err, page);

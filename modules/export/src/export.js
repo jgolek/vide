@@ -9,14 +9,16 @@ var yaml  = require('js-yaml'),
 /**
 	args
 */
-var argsDefinition = {
+var argsDefiniton = {
 	applicationFile:  { require: true, type: 'string' },
   patternDirectory: { require: true, type: 'string' },
+  objectsDirectory: { require: true, type: 'string' },
   modulesDirectory: { require: true, type: 'string' },
-	outputDirectory:  { require: true, type: 'string' }
+	outputDirectory:  { require: true, type: 'string' },
+  dataFile: { require: true, type: 'string' }
 };
 
-module.exports = function(args, callback) {
+module.exports = define(argsDefiniton, function(args, callback) {
 
   //args
   var filePatternSourceArgs = {
@@ -31,13 +33,21 @@ module.exports = function(args, callback) {
   }
   var modulesSource = new FileSource(fileModulesSource);
 
+  var fileObjectsSource = {
+    directory: args.objectsDirectory,
+    toLowerCase: true
+  }
+  var objectSource = new FileSource(fileObjectsSource);
+
+  var data = JSON.parse(fs.readFileSync(args.dataFile, 'utf8'));
 
   async.waterfall([
       readApplicationDefinition,
       convertToApplicationObject,
       transformToApplication,
       persistApplication
-    ], callback );
+    ], 
+  callback );
 
   function readApplicationDefinition(callback){
     fs.readFile(args.applicationFile, 'utf8', callback);
@@ -48,7 +58,7 @@ module.exports = function(args, callback) {
       console.log("LOAD");
       var app = yaml.load(fileData);
       callback(null, app);
-      console.log("TEST");
+      console.log("TEST", app);
     } catch(e) {
       console.log(e.stack);
       callback(e);
@@ -61,7 +71,9 @@ module.exports = function(args, callback) {
 
     var transformArgs = {
       page: application.page,
-      patternSource: patternSource
+      patternSource: patternSource,
+      objectSource: objectSource,
+      data: data
     }
 
     transform(transformArgs, callback);

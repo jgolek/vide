@@ -4,13 +4,10 @@ var argsDefintion = {
 }
 
 module.exports = function(args, callback){
-  var objectLines = ["", ""];
+  args.objectSource.all(afterAll);
 
-  
-
-  //objectSource.all(".js",)
-
-
-  callback(null, objectLines.join("\n"));
-
+  function afterAll(err, objects){
+    var objectLines = objects.map(function(obj){return obj.js});
+    callback(null, objectLines.join("\n"));
+  }
 }

@@ -15,6 +15,26 @@ function PatternSource(){
 	}
 }
 
+function ObjectSource(){
+	var self  = this;
+
+	this.all = function(callback){
+		var objects = [];
+
+		objects.push({
+			"js": "function DemoObj1(){}\n",
+			"name": "DemoObj1"
+		});
+
+		objects.push({
+			"js": "function DemoObj2(){}\n",
+			"name": "DemoObj2"
+		});
+
+		callback(null, objects);
+	}
+}
+
 exports.transformPage = function(test){
 	var page = {
 		name: "test",
@@ -24,12 +44,14 @@ exports.transformPage = function(test){
 			 },
 			{ name: "element2",
 			  pattern: "Pattern2" }
-		]
+		],
+		pageObjects: []
 	};
 
 	var args = {
 		page : page,
 	 	patternSource: new PatternSource(),
+	 	objectSource: new ObjectSource(),
 	 	data: { "test": "test"}
 	};
 

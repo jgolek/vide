@@ -10,7 +10,9 @@ page:
       y:      5
       pattern: 'Textoutput'
       patterndata: 
-         text: 'domain:housemanagement/manager/name'
+         text: 
+            type: 'domain'
+            value: 'housemanagement.manager.name'
     - 
       name: "element2"
       height: 100 
@@ -19,7 +21,9 @@ page:
       y:      155
       pattern: 'List'
       patterndata: 
-         items: 'domain:housemanagement/houses'
+         items:
+            type: 'domain'
+            value: 'housemanagement.houses'
     - 
       name: "element3"
       height: 100 
@@ -27,8 +31,10 @@ page:
       x:      260
       y:      155
       pattern: 'Textinput'
-      patterndata: 
-         text: 'element:element2/selected/name'
+      patterndata:
+        text: 
+            type: 'element'
+            value: 'element2.selected.name'
     - 
       name: "element4"
       height: 100 
@@ -37,8 +43,13 @@ page:
       y:      350
       pattern: 'Textoutput'
       patterndata: 
-         text: 'element:element2/selected/name'
-
+         text: 
+            type: 'element'
+            value: 'element2.selected.name'
+  pageObjects:
+    - 
+      name: "housemanagement"
+      type: "HouseManagement"
 
 
 

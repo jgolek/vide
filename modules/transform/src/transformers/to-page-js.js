@@ -19,7 +19,6 @@ module.exports = function(globalArgs, callback){
 		var pageJs = "//header\n";
 		pageJs += result.patterns+"\n";
 		pageJs += result.objects+"\n";
-		pageJs += result.elementBindings+"\n";
 		pageJs += result.pageBindings+"\n";
 
 		callback(err, pageJs);
@@ -35,18 +34,17 @@ module.exports = function(globalArgs, callback){
 	}
 
 	function buildObjects(callback){
-		var args = {
-			elements: globalArgs.page.elements,
-			patternSource: globalArgs.patternSource
-		}
-
-		toObjects(args, callback);
+		toObjects(globalArgs, callback);
 	}
 
 	function buildPageBindings(callback){
+
+		console.log(globalArgs.page);
+
 		var args = {
 			elements: globalArgs.page.elements,
-			data: globalArgs.data
+			data: globalArgs.data,
+			pageObjects: globalArgs.page.pageObjects
 		}
 
 		toPageBindings(args, callback);

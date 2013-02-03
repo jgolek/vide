@@ -10,7 +10,6 @@ exports.testToJs = function(test){
 		  	text2: { type: "domain", value: "demo.app" },
 		  	text3: { type: "element", value: "element2.selected.name" },
 		  	text4: { type: "element", value: "element2.selected" }
-
 		  }
 		},
 		{ name: "element2",
@@ -20,7 +19,8 @@ exports.testToJs = function(test){
 	var args = {
 		elements : elements,
 		patternSource: new PatternSource(),
-		data: { 'testdata': { 'name': 'test' } }
+		data: { 'demo': { 'name': 'test' } },
+		pageObjects: [ { type: "DemoObject", name: "demo" }]
 	}
 
 	transformer(args, testResult);
