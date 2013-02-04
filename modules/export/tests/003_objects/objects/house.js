@@ -1,9 +1,9 @@
-function House(url, repository){
-	var self = this;
+function House(data){
+  var self = this;
+  self.address = data.get('address' );
+  self.name = self.address;
 
-	self.persons = repository.getList(url + "/persons", Person);
-	self.housemanagement = repository.getReference(url + "/housemanagement", Housemanagement);
-
-
-
+  self.toString = function(){
+    return self.address();
+  }
 }

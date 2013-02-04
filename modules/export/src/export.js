@@ -4,7 +4,8 @@ var yaml  = require('js-yaml'),
     fse  = require('fs-extra'),
     fs  = require('fs'),
     path  = require('path'),
-    FileSource = require('../../source/src/source-fs');
+    FileSource = require('../../source/src/source-fs'),
+    define = require('../../define');
 
 /**
 	args
@@ -94,7 +95,8 @@ module.exports = define(argsDefiniton, function(args, callback) {
         [ 
           saveFile(outputHtmlFile, page.html),
           saveFile(outputJsFile,   page.js),
-          saveModule("knockout/knockout-2.1.0.js")
+          saveModule("knockout/knockout-2.1.0.js"),
+          saveModule("vide/repository.js")
         ],
         callback
       );
@@ -116,4 +118,4 @@ module.exports = define(argsDefiniton, function(args, callback) {
       }
     }
   }
-}
+});

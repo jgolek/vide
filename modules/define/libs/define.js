@@ -14,17 +14,20 @@ function validateFunctionWithArgs(argsDefintion, fn){
 
     for(var argName in argsDefintion){
       var arg = argsDefintion[argName];
+      if(arg.type){
+        arg = arg.type;
+      }
       var argValue = args[argName];
-      validate(arg, argValue);
+      validate(argName, arg, argValue);
     }
 
     fn(args, callback);
   }
 }
 
-function validate(argDefintion, argValue){
+function validate(argName, argDefintion, argValue){
   if(argDefintion != typeof(argValue)){
-    var error = new Error("invalide");
+    var error = new Error("For "+argName+" expected: "+argDefintion + "but get: " + argValue);
     throw error;
     //callback(error);
   }

@@ -24,25 +24,24 @@ exports.testExportApplication = function(test){
 	}, testResults );
 
 	function testResults(err, results) {
-		console.log("err");
 		throwIfError(err);
 
 		var expectedHtmlPage = results.expectedHtmlPage;
 		var exportedHtmlPage = results.exportedHtmlPage;
 		test.ok(expectedHtmlPage, "expectedHtmlPage is undefined");
 
-		//test.equal(expectedHtmlPage, exportedHtmlPage, "Compares expected with exported html page" );
+		test.equal(expectedHtmlPage, exportedHtmlPage, "Compares expected with exported html page" );
 
-		//diff.diffLines(expectedHtmlPage, exportedHtmlPage).forEach(compare);
+		diff.diffLines(expectedHtmlPage, exportedHtmlPage).forEach(compare);
 
 
 		var expectedJsPage = results.expectedJsPage;
 		var exportedJsPage = results.exportedJsPage;
 		test.ok(expectedJsPage, "expectedJsPage is undefined");
 
-		//test.equal(expectedJsPage, exportedJsPage, "Compares expected with exported js page" );
+		test.equal(expectedJsPage, exportedJsPage, "Compares expected with exported js page" );
 
-		//diff.diffLines(expectedJsPage, exportedJsPage).forEach(compare);
+		diff.diffLines(expectedJsPage, exportedJsPage).forEach(compare);
 
 		function compare(diffValue){
 			if(diffValue.added){

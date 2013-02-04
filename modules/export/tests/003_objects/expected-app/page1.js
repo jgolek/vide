@@ -1,22 +1,11 @@
+//header
 function Textoutput(model){
-  // pattern interface, model mapping!
-  // model is always observable or observablearray
-  // required interface
-
   var self = this;
   self.paint = ko.observable(false);
   self.model = model;
-  console.log(self.model);
   
   if(!self.model.text){
-    console.log(self.model.text());
-    //self.model.text = "not set";
-  }
-
-  self.repaint = function(){
-    self.paint(true);
-    //self.model.text("asd");
-    //rebind of knockout js?!
+    self.model.text = ko.observable("not set");
   }
 }
 
@@ -43,10 +32,23 @@ function List(model){
   };
 }
 
-function HouseManagement(data){
+function Textinput(model){
   var self = this;
-  self.houses   = data.getList('houses', House);
-  self.manager = data.get('manager', Person);
+  self.model = model;
+  
+  if(!self.model.text){
+    self.model.text = ko.observable("not set");
+  }
+}
+
+function Textoutput(model){
+  var self = this;
+  self.paint = ko.observable(false);
+  self.model = model;
+  
+  if(!self.model.text){
+    self.model.text = ko.observable("not set");
+  }
 }
 
 function House(data){
@@ -59,6 +61,12 @@ function House(data){
   }
 }
 
+function HouseManagement(data){
+  var self = this;
+  self.houses   = data.getList('houses', House);
+  self.manager = data.get('manager', Person);
+}
+
 function Person(data){
   var self = this;
   self.name = data.get('name');
@@ -69,14 +77,16 @@ function buildPageBindings(){
   var repository = new Repository(
     {
       "housemanagement": {
-        "houses": [ {
-          "address" : "abc street 1"
-        },
-        {
-          "address" : "abc street 2"
-        }],
+        "houses": [
+          {
+            "address": "abc street 1"
+          },
+          {
+            "address": "abc street 2"
+          }
+        ],
         "manager": {
-          "name" : "Hans Ditrich" 
+          "name": "Hans Ditrich"
         }
       }
     }
@@ -86,42 +96,41 @@ function buildPageBindings(){
 
   var textoutputForElement1 = new Textoutput(
     {
-      "text": housemanagement().manager().name
+      'text': housemanagement().manager().name
     }
   );
-
+  
   var listForElement2 = new List(
     {
-      "items": housemanagement().houses
+      'items': housemanagement().houses
     }
   );
-
-  var textoutputForElement3 = new Textoutput(
+  
+  var textinputForElement3 = new Textinput(
     {
-      "text": ko.observable()
+      'text': listForElement2.pattern.selected().name
     }
   );
-
   listForElement2.pattern.selected.subscribe(function(data){
-    textoutputForElement3.model.text(data.name);
+    textinputForElement3.model.text(data.name);
   });
-
+  
+  
   var textoutputForElement4 = new Textoutput(
     {
-      "text": ko.observable()
+      'text': listForElement2.pattern.selected().name
     }
   );
-
   listForElement2.pattern.selected.subscribe(function(data){
     textoutputForElement4.model.text(data.name);
   });
+  
 
   var bindings = {
-    "element1PatternInstance": textoutputForElement1,
-    "element2PatternInstance": listForElement2,
-    "element3PatternInstance": textoutputForElement3,
-    "element4PatternInstance": textoutputForElement4
-  }
-
+    'element1PatternInstance': textoutputForElement1,
+    'element2PatternInstance': listForElement2,
+    'element3PatternInstance': textinputForElement3,
+    'element4PatternInstance': textoutputForElement4
+  };
   return bindings;
 }

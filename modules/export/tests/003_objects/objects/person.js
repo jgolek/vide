@@ -1,6 +1,4 @@
-function Person(url, repository){
-	var self = this;
-
-	self.name = ko.observable();
-
+function Person(data){
+  var self = this;
+  self.name = data.get('name');
 }

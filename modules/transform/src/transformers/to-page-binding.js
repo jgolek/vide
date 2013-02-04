@@ -39,6 +39,7 @@ module.exports = function(args, callback){
 
   pagebindingLines.push(indent(buildBindingLines(args), '  ') + "\n" );
   pagebindingLines.push(indent(buildPageBindingLines(args), '  '));
+
   pagebindingLines.push("}");
 
   console.log(pagebindingLines.join("\n"));
@@ -64,7 +65,8 @@ function buildPageBindingLines(args) {
     lines.push("  '" + binding.elementName + "': " + binding.patternVar);
   });
   content += lines.join(",\n") + "\n";
-  content += "};";
+  content += "};\n";
+  content += "return bindings;";
   return content;
 }
 
@@ -83,7 +85,9 @@ function buildPatternBindings(elements){
   function buildPatternBindingString(binding){
     var lines = [];
 
-    lines.push("var " + binding.patternVar + " = new " + binding.patternName + "({" );
+    lines.push("var " + binding.patternVar + " = new " + binding.patternName + "(" );
+    lines.push("  {" );
+
 
     var selectables = [];
 
@@ -94,11 +98,11 @@ function buildPatternBindings(elements){
       console.log(binding);
       var patterndata = binding.patterndata[patternInputProperty];
       if(patterndata.type == 'static'){
-        patternBindings.push("  '" + patternInputProperty + "': '"+patterndata.value+"'" );
+        patternBindings.push("    '" + patternInputProperty + "': '"+patterndata.value+"'" );
       } else if( patterndata.type == 'domain' ) {
 
         var value = patterndata.value.split(".").join("().");
-        patternBindings.push("  '" + patternInputProperty + "': "+value );
+        patternBindings.push("    '" + patternInputProperty + "': "+value );
       } else if( patterndata.type == 'element' ) {
         var valueChain = patterndata.value.split(".");
         var referenceElementName = valueChain[0];
@@ -108,7 +112,7 @@ function buildPatternBindings(elements){
           throw new Error("Reference is missing: " + referenceElementName);
         }
         valueChain.shift();
-        patternBindings.push("  '" + patternInputProperty + "': "+referenceBinding.patternVar + "." + valueChain.join('().'));
+        patternBindings.push("    '" + patternInputProperty + "': "+referenceBinding.patternVar + ".pattern." + valueChain.join('().'));
 
         //TODO: rewrite this!
         var dataValue = valueChain.length > 1 ? "data."+valueChain.pop() : "data";
@@ -122,7 +126,8 @@ function buildPatternBindings(elements){
     }
 
     lines.push(patternBindings.join(",\n"));
-    lines.push("});");
+    lines.push("  }");
+    lines.push(");");
 
     selectables.forEach(function(selectable){
       lines.push(selectable.subscribePath +".subscribe(function(data){");
@@ -160,7 +165,7 @@ function buildRepositoryLines(data){
 function buildRootObjectVars(rootObjects){
   var lines = [];
   rootObjects.forEach(function(rootObject){
-    lines.push("var "+rootObject.name+" = repository.get( '"+rootObject.name+"', "+rootObject.type + ");");
+    lines.push("var "+rootObject.name+" = repository.get( '"+rootObject.name+"', "+rootObject.type + " );");
   });
   return lines.join("\n");
 }

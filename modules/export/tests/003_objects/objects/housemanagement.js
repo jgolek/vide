@@ -1,9 +1,5 @@
-function Housemanagement(data){
-
-	var self = this;
-	self.houses = data.houses; //should be observable
-	self.mananger = data.manager; //aggregate
-
-
-
+function HouseManagement(data){
+  var self = this;
+  self.houses   = data.getList('houses', House);
+  self.manager = data.get('manager', Person);
 }
