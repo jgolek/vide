@@ -51,16 +51,6 @@ function Textoutput(model){
   }
 }
 
-function House(data){
-  var self = this;
-  self.address = data.get('address' );
-  self.name = self.address;
-
-  self.toString = function(){
-    return self.address();
-  }
-}
-
 function HouseManagement(data){
   var self = this;
   self.houses   = data.getList('houses', House);
@@ -70,6 +60,16 @@ function HouseManagement(data){
 function Person(data){
   var self = this;
   self.name = data.get('name');
+}
+
+function House(data){
+  var self = this;
+  self.address = data.get('address' );
+  self.name = self.address;
+
+  self.toString = function(){
+    return self.address();
+  }
 }
 
 function buildPageBindings(){

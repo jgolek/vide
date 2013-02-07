@@ -1,7 +1,9 @@
 var FileSource = require("../src/source-fs");
+var buster = require('buster');
 
+buster.testCase("source", {
 
-exports.testAll = function(test){
+"exports.testAll" : function(done){
 
 	var args = {
 		directory: __dirname + "/data"
@@ -15,7 +17,8 @@ exports.testAll = function(test){
 	function testResult(err, objects){
 
 		console.log(objects);
-		test.equal(2, objects.length);
-		test.done();
+		assert.equals(2, objects.length);
+		done();
 	}
 }
+});

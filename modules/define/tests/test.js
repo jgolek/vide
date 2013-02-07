@@ -1,6 +1,9 @@
 var testmodule = require('./testmodule');
+var buster = require('buster');
 
-exports.testDefine = function(test){
+buster.testCase("define", {
+
+"exports.testDefine" : function(done){
 
 	var args = {
 		foo : 'test'
@@ -10,12 +13,12 @@ exports.testDefine = function(test){
 
 	function testResult(err, result){
 		console.log(result);
-		test.equal(args, result);
-		test.done();
+		assert.equals(args, result);
+		done();
 	}
-};
+},
 
-exports.testDefineError = function(test){
+"exports.testDefineError" : function(done){
 
 	var args = {
 		foo : 123
@@ -26,7 +29,8 @@ exports.testDefineError = function(test){
 	function testResult(err, result){
 		console.log(err);
 		console.log(result);
-		test.equal(args, result);
-		test.done();
+		assert.equals(args, result);
+		done();
 	}
-};
+}
+});
