@@ -27,7 +27,7 @@ function validateFunctionWithArgs(argsDefintion, fn){
 
 function validate(argName, argDefintion, argValue){
   if(argDefintion != typeof(argValue)){
-    var error = new Error("For "+argName+" expected: "+argDefintion + "but get: " + argValue);
+    var error = new Error("For '"+argName+"' expected: '"+argDefintion + "'' but get: '" + argValue + "'");
     throw error;
     //callback(error);
   }

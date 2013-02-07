@@ -1,4 +1,4 @@
-var define = require('../libs/define');
+var define = require('../lib/define');
 
 var argsDefinition = {
 	foo: 'string'

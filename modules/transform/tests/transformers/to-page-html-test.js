@@ -2,7 +2,7 @@ var transformer = require("../../src/transformers/to-page-html");
 
 exports.testToHtml = function(test){
 	var page = {
-		name: "test",
+		name: "Test",
 		elements: [
 			{ name: "element1",
 			  x: 100,
@@ -10,7 +10,8 @@ exports.testToHtml = function(test){
 			 },
 			{ name: "element2",
 			  pattern: "Pattern2" }
-		]
+		],
+		requiredModules: ['module1/test.js', 'module2/test.js']
 	};
 
 	var args = {

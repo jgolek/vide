@@ -1,0 +1,6 @@
+<span id="listheader" class="nav-header" data-bind="text: model.title || 'Header'">Header</span>
+<ul id="listitems" class="nav nav-list" data-bind="foreach: model.items" style="height:100%; overflow:auto;">
+  <li data-bind="click: $parent.select, css:{active: $parent.pattern.selected() == $data}">
+    <a ><span data-bind="text: $data"></span></a>
+  </li>
+</ul>

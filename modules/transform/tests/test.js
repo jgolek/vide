@@ -36,6 +36,43 @@ function ObjectSource(){
 	}
 }
 
+exports.transformPage = function(test){
+	var page = {
+		name: "test",
+		elements: [
+			{ name: "element1",
+			  pattern: "Pattern1"
+			 },
+			{ name: "element2",
+			  pattern: "Pattern2" }
+		],
+		pageObjects: [],
+		requiredModules: ['/module1/a.js']
+	};
+
+	var args = {
+		page : page,
+	 	patternSource: new PatternSource(),
+	 	objectSource: new ObjectSource(),
+	 	data: { "test": "test"}
+	};
+
+	transform( args, afterTransform );
+
+	function afterTransform(err, page){
+		console.log("DONE");
+		console.log("Error:", err);
+		//console.log(page.html);
+		//todo
+		console.log("PageJs:");
+		console.log(page.js);
+		test.ok(page.js);
+		test.done();
+	};
+	//html and css paser for nodejs!
+}
+
+
 buster.testCase("transform", {
 
 "exports.transformPage" : function(done){

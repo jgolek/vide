@@ -33,8 +33,10 @@ var argsDefinition = {
 module.exports = function(args, callback){
 
   var pagebindingLines = [];
-  pagebindingLines.push("function buildPageBindings(){" + "\n");
-  pagebindingLines.push(indent(buildRepositoryLines(args.data), '  ') + "\n" );
+
+  pagebindingLines.push(buildPageModelLines() + "\n");
+
+  pagebindingLines.push("function buildPageBindings(repository){" + "\n");
   pagebindingLines.push(indent(buildRootObjectVars(args.pageObjects), '  ') + "\n" );
 
   pagebindingLines.push(indent(buildBindingLines(args), '  ') + "\n" );
@@ -45,6 +47,21 @@ module.exports = function(args, callback){
   console.log(pagebindingLines.join("\n"));
 
   callback(null, pagebindingLines.join("\n"));
+}
+
+function buildPageModelLines(){
+
+  var lines = [];
+
+  lines.push("function buildPageModel(url, callback){");
+  lines.push("  $.get(url, function(data){");
+  lines.push("    var repository = new Repository(data, url);");
+  lines.push("    var pageBindings = buildPageBindings(repository);");
+  lines.push("    callback(pageBindings);");
+  lines.push("  });");
+  lines.push("}");
+
+  return lines.join('\n');
 }
 
 function buildBindingLines(args){
@@ -152,14 +169,6 @@ function elementToBinding(element){
   };
 
   return binding;
-}
-
-function buildRepositoryLines(data){
-  var lines = [];
-  lines.push("var repository = new Repository(");
-  lines.push(indent(JSON.stringify(data, null , "  "), "  "));
-  lines.push(");");
-  return lines.join("\n");
 }
 
 function buildRootObjectVars(rootObjects){
