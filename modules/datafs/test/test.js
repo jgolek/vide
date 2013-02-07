@@ -1,6 +1,7 @@
 var datafs = require('..');
 var async = require('async');
 var fs = require('fs');
+var buster = require('buster');
 
 var foo = {
   items: []
@@ -10,7 +11,9 @@ fs.writeFileSync(__dirname + '/data/foo.json', JSON.stringify(foo, null, '  '), 
 
 datafs.init(__dirname + '/data');
 
-exports.testCrud = function(test){
+buster.testCase("testCrud", {
+
+"exports.testCrud" : function(done){
 	async.series(
 		{
       'created'     : create, 
@@ -25,7 +28,8 @@ exports.testCrud = function(test){
 
   function testResults(err, results){
     if(err) throw new Error(err);
-    test.done();
+    refute(err);
+    done();
   }
 
   function create(callback){
@@ -52,3 +56,4 @@ exports.testCrud = function(test){
 	// put //update
 	// delete //remove
 }
+});

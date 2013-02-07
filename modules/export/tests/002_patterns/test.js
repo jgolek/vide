@@ -2,11 +2,13 @@ var xport = require("../../src/export"),
     fs    = require("fs"),
     cons = require('consolidate'),
     diff = require('diff'),
-    async = require('async');
+    async = require('async'),
+    buster = require('buster');
 
 
+buster.testCase("testExportApplication", {
 
-exports.testExportApplication = function(test){
+"exports.testExportApplication" : function(done){
 
 	var applicationDescribtionFile = __dirname + "/app_with_patterns.yml";
 	var exportOutputDirectory = __dirname + "/exported-app";
@@ -28,18 +30,18 @@ exports.testExportApplication = function(test){
 
 		var expectedHtmlPage = results.expectedHtmlPage;
 		var exportedHtmlPage = results.exportedHtmlPage;
-		test.ok(expectedHtmlPage, "expectedHtmlPage is undefined");
+		assert(expectedHtmlPage, "expectedHtmlPage is undefined");
 
-		test.equal(expectedHtmlPage, exportedHtmlPage, "Compares expected with exported html page" );
+		assert.equals(expectedHtmlPage, exportedHtmlPage, "Compares expected with exported html page" );
 
 		diff.diffLines(expectedHtmlPage, exportedHtmlPage).forEach(compare);
 
 
 		var expectedJsPage = results.expectedJsPage;
 		var exportedJsPage = results.exportedJsPage;
-		test.ok(expectedJsPage, "expectedJsPage is undefined");
+		assert(expectedJsPage, "expectedJsPage is undefined");
 
-		test.equal(expectedJsPage, exportedJsPage, "Compares expected with exported js page" );
+		assert.equals(expectedJsPage, exportedJsPage, "Compares expected with exported js page" );
 
 		diff.diffLines(expectedJsPage, exportedJsPage).forEach(compare);
 
@@ -52,7 +54,7 @@ exports.testExportApplication = function(test){
 			}			
 		}
 
-		test.done();
+		done();
 	}
 
 	function runExport(callback){
@@ -80,7 +82,8 @@ exports.testExportApplication = function(test){
 	function getExpectedJsPage(callback){
 		fs.readFile(__dirname + "/expected-app/page1.js", "utf8", callback);
 	}
-};
+}
+});
 
 function throwIfError(err){
 	if(err){

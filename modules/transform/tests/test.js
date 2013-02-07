@@ -1,4 +1,5 @@
 var transform = require("../src/transform");
+var buster = require('buster');
 
 function PatternSource(){
 	var self  = this;
@@ -35,7 +36,9 @@ function ObjectSource(){
 	}
 }
 
-exports.transformPage = function(test){
+buster.testCase("transform", {
+
+"exports.transformPage" : function(done){
 	var page = {
 		name: "test",
 		elements: [
@@ -64,8 +67,9 @@ exports.transformPage = function(test){
 		//todo
 		console.log("PageJs:");
 		console.log(page.js);
-		test.ok(page.js);
-		test.done();
+		assert(page.js);
+		done();
 	};
 	//html and css paser for nodejs!
-};
+}
+});
