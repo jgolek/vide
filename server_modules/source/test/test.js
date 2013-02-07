@@ -1,4 +1,4 @@
-var FileSource = require("../src/source-fs");
+var FileSource = require("../lib/source-fs");
 var buster = require('buster');
 
 buster.testCase("source", {

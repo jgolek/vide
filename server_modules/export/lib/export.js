@@ -1,10 +1,10 @@
 var yaml  = require('js-yaml'),
     async = require('async'),
-    transform = require('../../transform/src/transform'),
+    transform = require('../../transform'),
     fse  = require('fs-extra'),
     fs  = require('fs'),
     path  = require('path'),
-    FileSource = require('../../source/src/source-fs'),
+    FileSource = require('../../source'),
     define = require('../../define');
 
 /**
@@ -70,6 +70,7 @@ module.exports = define(argsDefiniton, function(args, callback) {
 
       function copyServerModule(modulePath, callback){
         var moduleName = path.basename(modulePath);
+        console.log(modulePath);
         fse.copy( modulePath, args.outputDirectory + '/server/'+moduleName, callback ); 
       }
     }
@@ -151,10 +152,8 @@ module.exports = define(argsDefiniton, function(args, callback) {
 
     function convertToApplicationObject(err, fileData){
        try {
-        console.log("LOAD");
         var app = yaml.load(fileData);
         callback(null, app);
-        console.log("TEST", app);
       } catch(e) {
         console.log(e.stack);
         callback(e);

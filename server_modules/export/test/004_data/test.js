@@ -1,4 +1,4 @@
-var xport = require("../../src/export"),
+var xport = require("../../"),
     fs    = require("fs"),
     cons = require('consolidate'),
     diff = require('diff'),

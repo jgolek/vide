@@ -1,4 +1,4 @@
-var transformer = require("../../src/transformers/to-page-binding");
+var transformer = require("../../lib/transformers/to-page-binding");
 
 exports.testToJs = function(test){
 	var elements = [

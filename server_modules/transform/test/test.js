@@ -1,4 +1,4 @@
-var transform = require("../src/transform");
+var transform = require("../lib/transform");
 var buster = require('buster');
 
 function PatternSource(){

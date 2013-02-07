@@ -2,7 +2,7 @@ name: 'testapp'
 
 requiredModules:
   server: 
-    - "../../../../modules/datafs"
+    - "../../../datafs"
   client: 
     - "../../../../client_modules/bootstrap"
     - "../../../../client_modules/jquery"

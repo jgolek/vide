@@ -1,5 +1,5 @@
 require('sugar'); 
-var transformer = require("../../src/transformers/to-page-objects");
+var transformer = require("../../lib/transformers/to-page-objects");
 
 exports.testToPagePatterns = function(test){
 	var args = {

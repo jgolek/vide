@@ -1,4 +1,4 @@
-var transformer = require("../../src/transformers/to-page-html");
+var transformer = require("../../lib/transformers/to-page-html");
 
 exports.testToHtml = function(test){
 	var page = {
