@@ -9,6 +9,7 @@ var data = {};
 exports.init = function(directory){
   exports.directory = directory;
   var files = fs.readdirSync(directory);
+
   files.forEach(function(file){
     console.log(file);
     var name = file.split('.')[0];
@@ -20,10 +21,16 @@ exports.init = function(directory){
 
 exports.use = function(app){
 
+  app.get('/data',     getAll );
   app.get('/data/*',     get );
   app.put('/data/*',    update );
   app.post('/data/*',   create );
   app.delete('/data/*', del );
+
+  function getAll(req, res){
+    var url = req.url;
+    afterOperation(url, res)(null, data);
+  }
 
   function get(req, res){
     var url = req.url;
@@ -42,9 +49,8 @@ exports.use = function(app){
 
   function create(req, res){
     var url = req.url;
-    console.log("Create(Save)", url);
-    var dataObject = JSON.parse(req.body.data);
-    exports.save(url, dataObject, afterOperation(url, res));
+    var dataObject = req.body;
+    exports.create(url, dataObject, afterOperation(url, res));
   }
 
   function del(req, res){
@@ -101,16 +107,16 @@ exports.update = function(url, sourceData, callback){
   }
 }
 
-exports.create = function(url, callback){
+exports.create = function(url, data, callback){
 
   exports.get(url, afterGet);
 
   function afterGet(err, list){
     if(err) callback(err);
 
-    list.push({});
+    list.push(data || {} );
     save(url);
-    callback(null, list.length);
+    callback();
   }
 }
 
@@ -133,14 +139,16 @@ exports.del = function(url, callback){
 var tout; 
 function save(url){
   var path = url.split('/');
-  var name = path[1];
+  var name = path[2];
+  console.log(url, path, name);
 
   if(tout){
     clearTimeout(tout);
   }
   tout = setTimeout(function(){
-      console.log("saved");
-      fs.writeFile(exports.directory + '/' + name + ".json", JSON.stringify(data[name], null, '  '), 'utf8' );
+      var filename = exports.directory + '/' + name + ".json";
+      console.log("saved", filename, data[name]);
+      fs.writeFile(filename, JSON.stringify(data[name], null, '  '), 'utf8' );
   }, 500);
 
 }

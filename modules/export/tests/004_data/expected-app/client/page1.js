@@ -53,11 +53,10 @@ function Textoutput(model){
 
 function House(data){
   var self = this;
-  self.address = data.get('address' );
-  self.name = self.address;
+  self.name = data.get( 'name' );
 
   self.toString = function(){
-    return self.address();
+    return self.name();
   }
 }
 
@@ -72,25 +71,15 @@ function Person(data){
   self.name = data.get('name');
 }
 
-function buildPageBindings(){
+function buildPageModel(url, callback){
+  $.get(url, function(data){
+    var repository = new Repository(data, url);
+    var pageBindings = buildPageBindings(repository);
+    callback(pageBindings);
+  });
+}
 
-  var repository = new Repository(
-    {
-      "housemanagement": {
-        "houses": [
-          {
-            "address": "abc street 1"
-          },
-          {
-            "address": "abc street 2"
-          }
-        ],
-        "manager": {
-          "name": "Hans Ditrich"
-        }
-      }
-    }
-  );
+function buildPageBindings(repository){
 
   var housemanagement = repository.get( 'housemanagement', HouseManagement );
 
@@ -125,7 +114,6 @@ function buildPageBindings(){
     textoutputForElement4.model.text(data.name);
   });
   
-
   var bindings = {
     'element1PatternInstance': textoutputForElement1,
     'element2PatternInstance': listForElement2,

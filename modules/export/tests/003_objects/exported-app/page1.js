@@ -86,7 +86,7 @@ function buildPageBindings(){
           }
         ],
         "manager": {
-          "name": "Hans Ditrich"
+          "name": "Hans Ditrich123"
         }
       }
     }
