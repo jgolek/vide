@@ -9,7 +9,8 @@ var transfomers = {
 
 var argsDefinition = {
 	page:          { type: 'object', require: true },
-  patternSource: { type: 'Source' }
+  patternSource: { type: 'object' },
+  objectSource:  { type: 'object' }
 };
 
 module.exports = function(args, callback){

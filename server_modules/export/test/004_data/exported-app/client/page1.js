@@ -72,11 +72,23 @@ function Person(data){
 }
 
 function buildPageModel(url, callback){
-  $.get(url, function(data){
-    var repository = new Repository(data, url);
-    var pageBindings = buildPageBindings(repository);
-    callback(pageBindings);
+  var requiredResources = ['housemanagement'];
+  var loadedResources = [];
+  var resources = {};
+
+  $.get(url +"/housemanagement", function(data){
+    resources.housemanagement = data;
+    loadedResources.push('housemanagement');
+    done();
   });
+
+  function done(){
+    if(requiredResources.length == loadedResources.length){
+      var repository = new Repository(resources, url);
+      var pageBindings = buildPageBindings(repository);
+      callback(pageBindings);
+    }
+  }
 }
 
 function buildPageBindings(repository){

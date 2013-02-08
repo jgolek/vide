@@ -14,7 +14,7 @@ var argsDefiniton = {
 	applicationFile:  { require: true, type: 'string' },
   patternDirectory: { require: true, type: 'string' },
   objectsDirectory: { require: true, type: 'string' },
-  dataDirectory:    { require: true, type: 'string' },
+  //dataDirectory:    { require: true, type: 'string' },
   outputDirectory:  { require: true, type: 'string' }
 };
 
@@ -23,7 +23,40 @@ module.exports = define(argsDefiniton, function(args, callback) {
   readApplicationDefinition( args.applicationFile, afterReadApplicationDefinition );
 
   function afterReadApplicationDefinition(err, applicationDefinition){
+
+    addVideModuels(applicationDefinition);
+
     createApplication(applicationDefinition, callback);
+  }
+
+  function addVideModuels(applicationDefinition){
+
+    if(!applicationDefinition.requiredModules){
+      applicationDefinition.requiredModules = { "server": [], "client": [] };
+    }
+
+    if(!applicationDefinition.requiredModules.server){
+      applicationDefinition.requiredModules.server = [];
+    }
+
+    if(!applicationDefinition.requiredModules.client){
+      applicationDefinition.requiredModules.client = [];
+    }
+
+    applicationDefinition.requiredModules.server
+      .push(path.resolve(__dirname + '/../../datafs'));
+
+    applicationDefinition.requiredModules.client
+      .push(path.resolve(__dirname + '/../../../client_modules/bootstrap'));
+
+    applicationDefinition.requiredModules.client
+      .push(path.resolve(__dirname + '/../../../client_modules/jquery'));
+
+    applicationDefinition.requiredModules.client
+      .push(path.resolve(__dirname + '/../../../client_modules/knockoutjs'));
+
+    applicationDefinition.requiredModules.client
+      .push(path.resolve(__dirname + '/../../../client_modules/vide'));
   }
 
   function createApplication(applicationDefinition, callback){
@@ -38,7 +71,7 @@ module.exports = define(argsDefiniton, function(args, callback) {
         createClient 
       ],
       function(err, list){
-        console.log(err, list);
+        console.log("Error:", err, list);
         callback(err, list);
       }
     );
@@ -70,8 +103,11 @@ module.exports = define(argsDefiniton, function(args, callback) {
 
       function copyServerModule(modulePath, callback){
         var moduleName = path.basename(modulePath);
-        console.log(modulePath);
-        fse.copy( modulePath, args.outputDirectory + '/server/'+moduleName, callback ); 
+        console.log("Path", modulePath);
+        fse.copy( modulePath, args.outputDirectory + '/server/'+moduleName, function(err){
+          if(err) console.log("err:", modulePath, err);
+          callback(err);
+        }); 
       }
     }
 
@@ -141,7 +177,10 @@ module.exports = define(argsDefiniton, function(args, callback) {
             throw new Error("file doen't exists " + path.resolve(modulePath));
           }
           var moduleName = path.basename(modulePath);
-          fse.copy( modulePath, args.outputDirectory + '/client/modules/'+moduleName, callback ); 
+          fse.copy( modulePath, args.outputDirectory + '/client/modules/'+moduleName, function(err){
+            if(err) console.log("err:", modulePath, err);
+            callback(err);
+          });  
         }
       }
     }
@@ -153,6 +192,7 @@ module.exports = define(argsDefiniton, function(args, callback) {
     function convertToApplicationObject(err, fileData){
        try {
         var app = yaml.load(fileData);
+
         callback(null, app);
       } catch(e) {
         console.log(e.stack);

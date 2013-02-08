@@ -34,7 +34,7 @@ module.exports = function(args, callback){
 
   var pagebindingLines = [];
 
-  pagebindingLines.push(buildPageModelLines() + "\n");
+  pagebindingLines.push(buildPageModelLines(args.pageObjects) + "\n");
 
   pagebindingLines.push("function buildPageBindings(repository){" + "\n");
   pagebindingLines.push(indent(buildRootObjectVars(args.pageObjects), '  ') + "\n" );
@@ -49,16 +49,35 @@ module.exports = function(args, callback){
   callback(null, pagebindingLines.join("\n"));
 }
 
-function buildPageModelLines(){
+function buildPageModelLines(pageObjects){
+
+  var resourceNames = pageObjects.map(function(pageObject){return "'"+pageObject.name+"'";});
 
   var lines = [];
 
   lines.push("function buildPageModel(url, callback){");
-  lines.push("  $.get(url, function(data){");
-  lines.push("    var repository = new Repository(data, url);");
-  lines.push("    var pageBindings = buildPageBindings(repository);");
-  lines.push("    callback(pageBindings);");
-  lines.push("  });");
+  lines.push("  var requiredResources = ["+resourceNames.join(",")+"];");
+  lines.push("  var loadedResources = [];");
+  lines.push("  var resources = {};");
+  
+  pageObjects.forEach(function(pageObject){
+    lines.push("");
+    lines.push("  $.get(url +\"/"+pageObject.name+"\", function(data){");
+    lines.push("    resources."+pageObject.name+" = data;");
+    lines.push("    loadedResources.push('"+pageObject.name+"');");
+    lines.push("    done();");
+    lines.push("  });");
+  });
+
+  lines.push("");
+  lines.push("  function done(){");
+  lines.push("    if(requiredResources.length == loadedResources.length){");
+  lines.push("      var repository = new Repository(resources, url);");
+  lines.push("      var pageBindings = buildPageBindings(repository);");
+  lines.push("      callback(pageBindings);");
+  lines.push("    }");
+  lines.push("  }");
+
   lines.push("}");
 
   return lines.join('\n');

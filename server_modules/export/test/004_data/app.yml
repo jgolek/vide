@@ -1,13 +1,8 @@
 name: 'testapp'
 
 requiredModules:
-  server: 
-    - "../../../datafs"
-  client: 
-    - "../../../../client_modules/bootstrap"
-    - "../../../../client_modules/jquery"
-    - "../../../../client_modules/knockoutjs"
-    - "../../../../client_modules/vide"
+  server: []
+  client: []
 
 page:
   name: 'page1'
@@ -59,6 +54,7 @@ page:
   pageObjects:
     - 
       name: "housemanagement"
+      url: "/data/housemanagement"
       type: "HouseManagement"
 
   requiredModules:
