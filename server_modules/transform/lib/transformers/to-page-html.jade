@@ -7,9 +7,10 @@ html
       !{cssElements}
 
     each module in page.requiredModules
-      script(src='#{module.js}', type='text/javascript')
+      if module.js 
+        script(src='#{module.js}', type='text/javascript')
       if module.css 
-        link(href='#{module.css}', rel="stylesheet", media="screen")
+        link(href='#{module.css}', rel="stylesheet")
 
     script(src='#{page.name.toLowerCase()}.js', type='text/javascript')
 
