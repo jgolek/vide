@@ -7,15 +7,18 @@ html
       !{cssElements}
 
     each module in page.requiredModules
-      script(src='#{module}', type='text/javascript')
+      script(src='#{module.js}', type='text/javascript')
+      if module.css 
+        link(href='#{module.css}', rel="stylesheet", media="screen")
 
     script(src='#{page.name.toLowerCase()}.js', type='text/javascript')
 
   body
-    each element in page.elements
-      div(id=element.name, data-bind="with: #{element.name}PatternInstance")
-        - var pattern = includePattern(element.pattern, '      ')
-        !{pattern}
+    .container
+      each element in page.elements
+        div(id=element.name, data-bind="with: #{element.name}PatternInstance")
+          - var pattern = includePattern(element.pattern, '      ')
+          !{pattern}
   script
     var bindings = buildPageModel("data", applyBindings);
     function applyBindings(bindings){

@@ -19,12 +19,12 @@ module.exports = function(args, callback){
       function forElement(element){
         var elementCssLines = [];
         elementCssLines.add("#"+element.name+" {");
-        elementCssLines.add(  "  width:  "+element.width+"px;");
-        elementCssLines.add(  "  height: "+element.height+"px;");
-        elementCssLines.add(  "  top:    "+element.y+"px;");
-        elementCssLines.add(  "  left:   "+element.x+"px;");
-        elementCssLines.add(  "  position: absolute;");
-        elementCssLines.add(  "  border: 1px solid;");
+        elementCssLines.add(  "  width:    "+element.width+"px;");
+        elementCssLines.add(  "  height:   "+element.height+"px;");
+        elementCssLines.add(  "  top:      "+element.y+"px;");
+        elementCssLines.add(  "  left:     "+element.x+"px;");
+        elementCssLines.add(  "  position: "+(element.position || "relative") + ";" );
+        elementCssLines.add(  "  border:   "+(element.border || 0)+"px solid;");
         elementCssLines.add("}");
         elementsCssLines.add(elementCssLines.join("\n"));
       }

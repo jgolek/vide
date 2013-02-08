@@ -6,6 +6,7 @@ elements:
     y: 10
     width: 100
     height: 100
+    border: 1
     pattern: List
     patterndata:
       items:
@@ -21,6 +22,12 @@ pageObjects:
     type: ListObject
 
 requiredModules:
-  - knockoutjs/knockout-2.1.0.js
-  - jquery/jquery-1.7.1-min.js
-  - vide/lib/repository.js
+  - 
+    js: knockoutjs/knockout-2.1.0.js
+  - 
+    js: jquery/jquery-1.7.1-min.js
+  - 
+    js: vide/lib/repository.js
+  - 
+    js:  bootstrap/2.3.0/bootstrap.js
+    css: bootstrap/2.3.0/bootstrap.css
