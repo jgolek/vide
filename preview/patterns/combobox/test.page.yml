@@ -1,0 +1,28 @@
+name: Header
+elements:
+  -
+    name: element1
+    x: 0
+    y: 10
+    width: 500
+    height: 50
+    border: 0
+    pattern: Combobox
+
+pageObjects:
+  - 
+    name: comboxbox
+    type: ComboboxObject
+
+requiredModules:
+  - 
+    js: knockoutjs/knockout-2.1.0.js
+  - 
+    js: jquery/jquery-1.7.1-min.js
+  - 
+    js: vide/lib/repository.js
+  - 
+    js:  bootstrap/2.3.0/bootstrap.js
+    css: bootstrap/2.3.0/bootstrap.css
+  - 
+    css: bootstrap/2.3.0/font-awesome.css
