@@ -12,8 +12,8 @@ var yaml  = require('js-yaml'),
 */
 var argsDefiniton = {
 	applicationFile:  { require: true, type: 'string' },
-  patternDirectory: { require: true, type: 'string' },
-  objectsDirectory: { require: true, type: 'string' },
+  //patternDirectory: { require: true, type: 'string' },
+  //objectsDirectory: { require: true, type: 'string' },
   //dataDirectory:    { require: true, type: 'string' },
   outputDirectory:  { require: true, type: 'string' }
 };
@@ -24,12 +24,12 @@ module.exports = define(argsDefiniton, function(args, callback) {
 
   function afterReadApplicationDefinition(err, applicationDefinition){
 
-    addVideModuels(applicationDefinition);
+    addDefaultModuelsToApplicationDefinition(applicationDefinition);
 
     createApplication(applicationDefinition, callback);
   }
 
-  function addVideModuels(applicationDefinition){
+  function addDefaultModuelsToApplicationDefinition(applicationDefinition){
 
     if(!applicationDefinition.requiredModules){
       applicationDefinition.requiredModules = { "server": [], "client": [] };
@@ -87,8 +87,8 @@ module.exports = define(argsDefiniton, function(args, callback) {
     }
 
     function createData(callback){
-      if(args.dataDirectory){
-        fse.copy(args.dataDirectory, args.outputDirectory + '/data', callback);
+      if(applicationDefinition.dataDirectory){
+        fse.copy(applicationDefinition.dataDirectory, args.outputDirectory + '/data', callback);
       }else{
         callback();
       }
@@ -113,36 +113,60 @@ module.exports = define(argsDefiniton, function(args, callback) {
 
     function createClient(callback){
 
-      async.waterfall(
+      async.parallel(
         [
           copyClientModules,
-          createPage,
-          persistPage
+          createPages,
         ], 
         callback
       );
 
-      function createPage(callback){
+      function createPages(callback){
+
+        var filePagesSourceArgs = {
+          directory : applicationDefinition.pagesDirectory,
+          toLowerCase: true
+        };
+        var pagesSource = new FileSource(filePagesSourceArgs);
+
+        pagesSource.all(forAllPages);
+
+        function forAllPages(err, pages){
+
+          var pagesObjects = pages.map(function(page){ return yaml.load(page.yml); });
+
+          async.forEach(pagesObjects, createPage, callback);
+        }
+      }
+
+      function createPage(page, callback){
+
+        console.log("PAGE", page);
 
         var filePatternSourceArgs = {
-          directory : args.patternDirectory,
+          directory : applicationDefinition.patternsDirectory,
           toLowerCase: true
         };
         var patternSource = new FileSource(filePatternSourceArgs);
 
         var fileObjectsSource = {
-          directory: args.objectsDirectory,
+          directory: applicationDefinition.objectsDirectory,
           toLowerCase: true
         };
         var objectSource = new FileSource(fileObjectsSource);
 
         var transformArgs = {
-          page: applicationDefinition.page,
+          page: page,
           patternSource: patternSource,
           objectSource: objectSource
         }
 
-        transform(transformArgs, callback);
+        transform(transformArgs, afterTransfrom);
+
+        function afterTransfrom(err, page){
+            if(err) callback(err);
+            persistPage(page, callback);
+        }
       }
 
       function persistPage(page, callback){
