@@ -5,6 +5,7 @@ var yaml  = require('js-yaml'),
     fs  = require('fs'),
     path  = require('path'),
     FileSource = require('../../source'),
+    PatternSource = require('./source/patternsource'),
     define = require('../../define');
 
 /**
@@ -12,9 +13,6 @@ var yaml  = require('js-yaml'),
 */
 var argsDefiniton = {
 	applicationFile:  { require: true, type: 'string' },
-  //patternDirectory: { require: true, type: 'string' },
-  //objectsDirectory: { require: true, type: 'string' },
-  //dataDirectory:    { require: true, type: 'string' },
   outputDirectory:  { require: true, type: 'string' }
 };
 
@@ -147,7 +145,7 @@ module.exports = define(argsDefiniton, function(args, callback) {
           directory : applicationDefinition.patternsDirectory,
           toLowerCase: true
         };
-        var patternSource = new FileSource(filePatternSourceArgs);
+        var patternSource = new PatternSource(filePatternSourceArgs);
 
         var fileObjectsSource = {
           directory: applicationDefinition.objectsDirectory,
