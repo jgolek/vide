@@ -1,22 +1,26 @@
-name: Combobox
+name: ButtonBig
 elements:
   -
     name: element1
     x: 0
     y: 10
-    width: 500
+    width: 300
     height: 50
     border: 0
-    pattern: Combobox
+    pattern: ButtonBig
     patterndata:
-      objects:
-         type: domain
-         value: combobox.objects
+      name:
+         type: static
+         value: 'Open something'
+      link:
+         type: static
+         value: 'NewPage'
+      icon:
+         type: static
+         value: 'icon-signal'
 
-pageObjects:
-  - 
-    name: combobox
-    type: ComboboxObject
+pageObjects: []
+
 
 requiredModules:
   - 

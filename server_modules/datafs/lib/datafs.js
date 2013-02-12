@@ -6,13 +6,21 @@ var path = require('path');
 exports.directory = __dirname + "./data/";
 
 var data = {};
-exports.init = function(directory){
+var urlPrefix = "/data";
+exports.init = function(directory, urlPrefixArg){
   exports.directory = directory;
+
+  if(urlPrefixArg){ urlPrefix = urlPrefixArg; }
+
   var files = fs.readdirSync(directory);
 
   files.forEach(function(file){
     console.log(file);
-    var name = file.split('.')[0];
+    var fileParts = file.split('.');
+    var name = fileParts[0];
+    
+    if( fileParts[1] != 'json' ) { return; }
+    
     console.log(directory + '/' + file);
     data[name] = JSON.parse(fs.readFileSync(directory + '/' + file, 'utf8'));
   });
@@ -21,11 +29,11 @@ exports.init = function(directory){
 
 exports.use = function(app){
 
-  app.get('/data',     getAll );
-  app.get('/data/*',     get );
-  app.put('/data/*',    update );
-  app.post('/data/*',   create );
-  app.delete('/data/*', del );
+  app.get(urlPrefix,     getAll );
+  app.get(urlPrefix+'/*',     get );
+  app.put(urlPrefix+'/*',    update );
+  app.post(urlPrefix+'/*',   create );
+  app.delete(urlPrefix+'/*', del );
 
   function getAll(req, res){
     var url = req.url;
@@ -115,7 +123,7 @@ exports.create = function(url, data, callback){
 
     list.push(data || {} );
     save(url);
-    callback();
+    callback(null, data);
   }
 }
 

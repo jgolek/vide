@@ -7,12 +7,16 @@ elements:
     width: 500
     height: 50
     border: 0
-    pattern: buttoncreate
+    pattern: ButtonCreate
+    patterndata:
+      objects:
+         type: domain
+         value: buttoncreate.objects
 
 pageObjects:
   - 
     name: buttoncreate
-    type: ButtonCreate
+    type: ButtonObject
 
 requiredModules:
   - 

@@ -77,6 +77,8 @@ function buildPageModelLines(pageObjects){
   lines.push("      callback(pageBindings);");
   lines.push("    }");
   lines.push("  }");
+  lines.push("  done();");
+
 
   lines.push("}");
 

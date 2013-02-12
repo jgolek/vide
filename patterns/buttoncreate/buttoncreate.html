@@ -1,18 +1,23 @@
 
-<button class="btn icon-plus" data-target="#myModal" data-toggle="modal"></button>
+<button class="btn icon-plus" data-target="#createModal" data-toggle="modal"></button>
 
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="createModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Jundenglichen Anlegen</h3>
+    <h3 id="createModalLabel">Jundenglichen Anlegen</h3>
   </div>
   <div class="modal-body">
-  	<!-- Get From data -->
-  	<p>Name</p>
-    <input type='text'></input>
+    <form class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Name</label>
+        <div class="controls">
+          <input type="text" id="inputEmail" placeholder="..." data-bind='value: value'>
+        </div>
+      </div>
+    </form>
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Abbrechen</button>
-    <button class="btn btn-primary">Anlegen</button>
+    <button class="btn btn-primary" data-bind="click: create" data-dismiss="modal">Anlegen</button>
   </div>
 </div>

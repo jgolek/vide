@@ -1,0 +1,21 @@
+name: ListLink
+elements:
+  -
+    name: element1
+    x: 10
+    y: 10
+    width: 300
+    height: 100
+    pattern: ListLink
+
+pageObjects: []
+requiredModules:
+  - 
+    js: knockoutjs/knockout-2.1.0.js
+  - 
+    js: jquery/jquery-1.7.1-min.js
+  - 
+    js: vide/lib/repository.js
+  - 
+    js:  bootstrap/2.3.0/bootstrap.js
+    css: bootstrap/2.3.0/bootstrap.css

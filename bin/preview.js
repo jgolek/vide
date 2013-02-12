@@ -8,6 +8,8 @@ var transformToHtml = require('../server_modules/transform/lib/transformers/to-p
 var transformToJs = require('../server_modules/transform/lib/transformers/to-page-js');
 var fs = require('fs');
 
+var datafs = require('../server_modules/datafs');
+
 
 var argv = require('optimist')
 	.usage('Usage: $0 --patternsdir <dir>')
@@ -22,15 +24,36 @@ var patternsdir = argv.patternsdir;
 app.use(express.bodyParser());
 app.use(express.static(path.resolve(__dirname + "/../client_modules/")));
 
-app.get("/data/:pattern", function(req, res){
+app.get("/data", function(req, res){
+	res.send('type /data/patternName');
+});
 
+app.get("/data/:pattern", function(req, res){
 	var patternName = req.params.pattern;
-	console.log("get", patternsdir +'/'+patternName+'/test.data.json');
-	fs.readFile(patternsdir +'/'+patternName+'/test.data.json', 'utf8', function(err, filedata){
-		console.log(filedata);
-		res.send(JSON.parse(filedata));
+	if(!patternName){
+		res.send('No Data: type /data/<patternName>');
+		return;
+	}
+
+	datafs.init(patternsdir +'/'+patternName+'/data');
+
+	datafs.get('', function(err, object){
+		res.send(object);
 	});
-}); 
+});
+
+app.post("/data/:pattern/:path", function(req, res){
+	var patternName = req.params.pattern;
+	if(!patternName){
+		res.send('No Data: type /data/<patternName>');
+		return;
+	}
+
+	datafs.init(patternsdir +'/'+patternName+'/data');
+	datafs.create('/data/'+req.params.path, req.body, function(){
+		res.send({});
+	});
+});  
 
 app.get("/:pattern.js", function(req, res){
 
@@ -70,11 +93,16 @@ function buildTransformArgs(patternName){
 	var objectSource = new function(){
 		var self = this;
 		self.all = function(callback){
-			var result = [
-			 { 
-			 	js: fs.readFileSync(patternsdir + "/"+patternName+"/test.object.js") 
-			 }
-			];
+			var result = [];
+			try{
+				result.push(
+				 { 
+				 	js: fs.readFileSync(patternsdir + "/"+patternName+"/test.object.js") 
+				 }
+				);
+			}catch(exc){
+				console.log('WARN: ', exc);
+			}
 			callback(null, result);
 		}
 	};
