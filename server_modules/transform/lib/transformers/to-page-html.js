@@ -23,7 +23,7 @@ module.exports = function(args, callback){
         elementCssLines.add(  "  height:   "+element.height+"px;");
         elementCssLines.add(  "  top:      "+element.y+"px;");
         elementCssLines.add(  "  left:     "+element.x+"px;");
-        elementCssLines.add(  "  position: "+(element.position || "relative") + ";" );
+        elementCssLines.add(  "  position: "+(element.position || "absolute") + ";" );
         elementCssLines.add(  "  border:   "+(element.border || 0)+"px solid;");
         elementCssLines.add("}");
         elementsCssLines.add(elementCssLines.join("\n"));

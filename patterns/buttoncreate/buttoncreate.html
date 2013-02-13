@@ -1,5 +1,23 @@
 
-<button class="btn icon-plus" data-target="#createModal" data-toggle="modal"></button>
+<div class="btn-group">
+  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+    <i class="icon-user icon-large"></i>
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+    <li><a tabindex="-1" href="#" data-target="#createModal" data-toggle="modal">Jugendlichen hinzufügen</a></li>
+    <li class="disabled"><a tabindex="-1" href="">Jugendlichen löschen</a></li>
+  </ul>
+</div>
+
+<!--
+<div class="input-prepend input-append">
+  <button class="btn icon-plus" type="button">Go!</button>
+  <button class="btn icon-plus" type="button">Go!</button>
+</div>
+
+<button class="btn icon-plus icon-large" data-target="#createModal" data-toggle="modal"></button>
+-->
 
 <div id="createModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
   <div class="modal-header">

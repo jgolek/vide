@@ -3,6 +3,12 @@ html
   head
     title= page.name.capitalize()
     - var cssElements = includeElementsCss(page.elements, '      ');
+
+    style(type='text/css')
+      .container {
+        position: relative;
+      }
+
     style(type='text/css')
       !{cssElements}
 
