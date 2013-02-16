@@ -1,0 +1,13 @@
+{
+  "houses": [
+    {
+      "name": "abc street asd"
+    },
+    {
+      "name": "1234"
+    }
+  ],
+  "manager": {
+    "name": "Hans Ditrich123"
+  }
+}

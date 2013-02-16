@@ -38,6 +38,7 @@ module.exports = function(args, callback){
 
   pagebindingLines.push("function buildPageBindings(repository){" + "\n");
   pagebindingLines.push(indent(buildRootObjectVars(args.pageObjects), '  ') + "\n" );
+  pagebindingLines.push(indent('var pageinput = $.parseQuery(location.search);', '  ') + "\n" );
 
   pagebindingLines.push(indent(buildBindingLines(args), '  ') + "\n" );
   pagebindingLines.push(indent(buildPageBindingLines(args), '  '));
@@ -74,6 +75,7 @@ function buildPageModelLines(pageObjects){
   lines.push("    if(requiredResources.length == loadedResources.length){");
   lines.push("      var repository = new Repository(resources, url);");
   lines.push("      var pageBindings = buildPageBindings(repository);");
+  lines.push("      repository.enableUpdate();");
   lines.push("      callback(pageBindings);");
   lines.push("    }");
   lines.push("  }");
@@ -135,31 +137,40 @@ function buildPatternBindings(elements){
     for(var patternInputProperty in binding.patterndata){
       console.log(binding);
       var patterndata = binding.patterndata[patternInputProperty];
-      if(patterndata.type == 'static'){
-        patternBindings.push("    '" + patternInputProperty + "': '"+patterndata.value+"'" );
-      } else if( patterndata.type == 'domain' ) {
 
-        var value = patterndata.value.split(".").join("().");
-        patternBindings.push("    '" + patternInputProperty + "': "+value );
-      } else if( patterndata.type == 'element' ) {
-        var valueChain = patterndata.value.split(".");
-        var referenceElementName = valueChain[0];
-        var referenceBinding = bindings[referenceElementName];
-        console.log(referenceBinding);
-        if(!referenceBinding){
-          throw new Error("Reference is missing: " + referenceElementName);
-        }
-        valueChain.shift();
-        patternBindings.push("    '" + patternInputProperty + "': "+referenceBinding.patternVar + ".pattern." + valueChain.join('().'));
+      switch( patterndata.type ) {
+        case 'static':
+          patternBindings.push("    '" + patternInputProperty + "': '"+patterndata.value+"'" );
+          break;
+        case 'domain':
+          var value = patterndata.value.split(".").join("().");
+          patternBindings.push("    '" + patternInputProperty + "': "+value );
+          break;
+        case 'element':
+          var valueChain = patterndata.value.split(".");
+          var referenceElementName = valueChain[0];
+          var referenceBinding = bindings[referenceElementName];
+          console.log(referenceBinding);
+          if(!referenceBinding){
+            throw new Error("Reference is missing: " + referenceElementName);
+          }
+          valueChain.shift();
+          //patternBindings.push("    '" + patternInputProperty + "': "+referenceBinding.patternVar + ".pattern." + valueChain.join('().'));
+          patternBindings.push("    '" + patternInputProperty + "': ko.observable()");
 
-        //TODO: rewrite this!
-        var dataValue = valueChain.length > 1 ? "data."+valueChain.pop() : "data";
-        selectables.push({
-          subscribePath: referenceBinding.patternVar+".pattern."+valueChain[0],
-          referencePath: binding.patternVar + ".model."+patternInputProperty+"("+dataValue+");"
-        });
-      } else {
-        throw new Error("unknown type " + patterndata.type);
+          //TODO: rewrite this!
+          var dataValue = valueChain.length > 1 ? "data."+valueChain.pop() : "data";
+          selectables.push({
+            fnUpdateName: "update"+patternInputProperty+binding.patternVar,
+            subscribePath: referenceBinding.patternVar+".pattern."+valueChain[0],
+            referencePath: binding.patternVar + ".model."+patternInputProperty+"("+dataValue+");"
+          });
+          break;
+        case 'pageinput':
+          patternBindings.push("    '" + patternInputProperty + "': pageinput."+patterndata.value );
+          break;
+        default:
+          throw new Error("unknown type " + patterndata.type);
       }
     }
 
@@ -168,9 +179,13 @@ function buildPatternBindings(elements){
     lines.push(");");
 
     selectables.forEach(function(selectable){
-      lines.push(selectable.subscribePath +".subscribe(function(data){");
+      lines.push('var '+selectable.fnUpdateName+' = function(data){');
       lines.push("  "+selectable.referencePath);
-      lines.push("});");
+      lines.push("};")
+
+      lines.push(selectable.subscribePath +".subscribe("+selectable.fnUpdateName+");");
+      lines.push(selectable.fnUpdateName+'('+selectable.subscribePath+'());');
+
       lines.push("");
     });
 

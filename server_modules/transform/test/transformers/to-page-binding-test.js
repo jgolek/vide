@@ -9,7 +9,9 @@ exports.testToJs = function(test){
 		  	text1: { type: "static", value: "demodata" },
 		  	text2: { type: "domain", value: "demo.app" },
 		  	text3: { type: "element", value: "element2.selected.name" },
-		  	text4: { type: "element", value: "element2.selected" }
+		  	text4: { type: "element", value: "element2.selected" },
+		  	text5: { type: "pageinput", value: "input1" }
+
 		  }
 		},
 		{ name: "element2",

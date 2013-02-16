@@ -1,0 +1,11 @@
+{
+	"name" : "fooname",
+	"bar": {
+	  "name" : "barname"
+	},
+	"list" : [
+	  { "name" : "bar1"},
+	  { "name" : "bar2"},
+	  { "name" : "bar3"}
+	]
+}
