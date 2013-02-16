@@ -1,0 +1,41 @@
+
+<h2> Fragenbogen für Thomas Maier </h2>
+<div class="alert alert-block alert-info">
+  Auszufühlen von <strong>Thomas Maier.</strong> 
+</div>
+
+<!-- ko foreach: kategorien -->
+
+<h3 data-bind='text: title'> </h3>
+
+<!-- ko foreach: $data.unterkategorien -->
+<table class="table table-hover table-striped">
+  <thead>
+    <tr> 
+      <th data-bind='text: $data.title' style="width:100%"></th>
+      <th> A </th>
+      <th> B </th>
+      <th> C </th>
+      <th> D </th>
+    <tr>
+  </thead>
+  <tbody data-bind='foreach: $data.fragen'>
+   <tr>
+     <td data-bind='text: $data.frage'> </td>
+     <td> <input type="radio" value="a" data-bind="checked: ergebnis"> </input> </td>
+     <td> <input type="radio" value="b" data-bind="checked: ergebnis"> </input> </td>
+     <td> <input type="radio" value="c" data-bind="checked: ergebnis"> </input> </td>
+     <td> <input type="radio" value="d" data-bind="checked: ergebnis"> </input> </td>
+   </tr>
+  </tbody>
+</table>
+
+<!-- /ko -->
+
+<!-- /ko -->
+
+<hr>
+<p class='pull-right'>
+  <button class="btn btn-large" type="button"><i class='icon-remove icon-large'></i> <span data-bind='text: label.abort'><span></button>
+  <button class="btn btn-large btn-primary" type="button"><i class='icon-ok icon-large'></i> <span data-bind='text: label.next'><span></button>
+</p>
