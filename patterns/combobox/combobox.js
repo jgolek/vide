@@ -15,6 +15,11 @@ function Combobox(model){
   	console.log('select', data);
   	self.inputValue(data.name());
   	self.pattern.selected(data);
+  	self.model.selected(data);
+  }
+
+  if(self.objects().length > 0){
+  	self.select(self.objects()[0]);
   }
 
   self.list = function(){

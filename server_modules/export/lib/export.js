@@ -196,7 +196,7 @@ module.exports = define(argsDefiniton, function(args, callback) {
 
         function copyClientModule(modulePath, callback){
           if(!fs.existsSync(modulePath)){
-            throw new Error("file doen't exists " + path.resolve(modulePath));
+            throw new Error("file doen't exists " + path.resolve(modulePath) );
           }
           var moduleName = path.basename(modulePath);
           fse.copy( modulePath, args.outputDirectory + '/client/modules/'+moduleName, function(err){
