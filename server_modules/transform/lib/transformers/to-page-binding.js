@@ -36,8 +36,10 @@ module.exports = function(args, callback){
 
   pagebindingLines.push(buildPageModelLines(args.pageObjects) + "\n");
 
-  pagebindingLines.push("function buildPageBindings(repository){" + "\n");
-  pagebindingLines.push(indent(buildRootObjectVars(args.pageObjects), '  ') + "\n" );
+  pagebindingLines.push("function buildPageBindings(resources){");
+  pagebindingLines.push(indent(buildResourcesVars(args.pageObjects), '  '));
+  pagebindingLines.push(indent('resources.enableAutoUpdate();', '  '));
+  pagebindingLines.push("");
   pagebindingLines.push(indent('var pageinput = $.parseQuery(location.search);', '  ') + "\n" );
 
   pagebindingLines.push(indent(buildBindingLines(args), '  ') + "\n" );
@@ -56,34 +58,27 @@ function buildPageModelLines(pageObjects){
 
   var lines = [];
 
-  lines.push("function buildPageModel(url, callback){");
-  lines.push("  var requiredResources = ["+resourceNames.join(",")+"];");
-  lines.push("  var loadedResources = [];");
-  lines.push("  var resources = {};");
-  
-  pageObjects.forEach(function(pageObject){
-    lines.push("");
-    lines.push("  $.get(url +\"/"+pageObject.name+"\", function(data){");
-    lines.push("    resources."+pageObject.name+" = data;");
-    lines.push("    loadedResources.push('"+pageObject.name+"');");
-    lines.push("    done();");
-    lines.push("  });");
-  });
-
+  lines.push("function buildPageModel(callback){");
+  lines.push("  new Resources(")
+  lines.push("    [");
+  lines.push(indent(buildResourceMapping(), "      "));
+  lines.push("    ],");
+  lines.push("    done");
+  lines.push("  );");
   lines.push("");
-  lines.push("  function done(){");
-  lines.push("    if(requiredResources.length == loadedResources.length){");
-  lines.push("      var repository = new Repository(resources, url);");
-  lines.push("      var pageBindings = buildPageBindings(repository);");
-  lines.push("      repository.enableUpdate();");
-  lines.push("      callback(pageBindings);");
-  lines.push("    }");
+  lines.push("  function done(resources){");
+  lines.push("    var pageBindings = buildPageBindings(resources);");
+  lines.push("    callback(pageBindings);");
   lines.push("  }");
-  lines.push("  done();");
-
-
   lines.push("}");
 
+  function buildResourceMapping(){
+    var resourceLines = [];
+    pageObjects.forEach(function(pageObject){
+      resourceLines.push('{ url: "'+pageObject.url+'", as: "'+pageObject.name+'" }')
+    });
+    return resourceLines.join(",\n");
+  }
   return lines.join('\n');
 }
 
@@ -207,10 +202,10 @@ function elementToBinding(element){
   return binding;
 }
 
-function buildRootObjectVars(rootObjects){
+function buildResourcesVars(resourceObjects){
   var lines = [];
-  rootObjects.forEach(function(rootObject){
-    lines.push("var "+rootObject.name+" = repository.get( '"+rootObject.name+"', "+rootObject.type + " );");
+  resourceObjects.forEach(function(resourceObject){
+    lines.push("var "+resourceObject.name+" = resources.getObjectOrGetList( '"+resourceObject.name+"', "+resourceObject.type + " );");
   });
   return lines.join("\n");
 }

@@ -22,7 +22,10 @@ exports.testToJs = function(test){
 		elements : elements,
 		patternSource: new PatternSource(),
 		data: { 'demo': { 'name': 'test' } },
-		pageObjects: [ { type: "DemoObject", name: "demo", url: "/data/demo" }]
+		pageObjects: [ 
+			{ type: "DemoObject", name: "demo1", url: "/data/demo1" },
+			{ type: "DemoObject", name: "demo2", url: "/data/demo2" }
+		]
 	}
 
 	transformer(args, testResult);

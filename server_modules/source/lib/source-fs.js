@@ -2,11 +2,13 @@ var fs = require('fs');
 var path = require('path');
 
 var async = require('async');
+require('sugar');
 
 var argsDefinition = {
 	directory: {},
 	fileType: {},
-	toLowerCase: {type: 'boolean'}
+	toLowerCase: {type: 'boolean'},
+	onlyWithSuffix: {type: 'string'}
 };
 
 module.exports = function(args){
@@ -26,7 +28,14 @@ module.exports = function(args){
 		function afterReadDir(err, files){
 			console.log(files);
 
-			async.map(files, mapFileToObject, callback);
+			var filteredFiles = files;
+
+			if(args.onlyWithSuffix){
+				console.log("only with suffix");
+				filteredFiles = files.filter(function(file){ return file.endsWith(args.onlyWithSuffix); });
+			}
+
+			async.map(filteredFiles, mapFileToObject, callback);
 
 			function mapFileToObject(file, callback){
 
