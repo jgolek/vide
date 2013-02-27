@@ -9,7 +9,7 @@ var argsDefintion = {
 module.exports = function(args, callback){
 
     function includePattern(patternName){
-      return args.patternSource.get(patternName + ".html");
+      return args.patternSource.get(patternName+".html");
     }
 
     function includeElements(elements){

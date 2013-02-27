@@ -90,5 +90,6 @@ function ResourceModelAdapter( Model, resourceName ){
     res.send('destroy forum ' + req.params.forum);
   };
 }
+module.exports.ResourceModelAdapter = ResourceModelAdapter;
 
 

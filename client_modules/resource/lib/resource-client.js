@@ -33,14 +33,8 @@ function Resources(resources, callback){
         callback(null, resourceData);
       }
     }
+    done();
   };
-
-  loadResources(resources, function(err, resourceDataArg){
-    resourceObject = new ResourceObject(resourceDataArg);
-    resourceData = resourceDataArg;
-    console.log(resourceData);
-    callback(self);
-  });
 
   self.getObjectOrGetList = function(name, Type){
     if( resourceData[name] instanceof Array ){
@@ -53,6 +47,13 @@ function Resources(resources, callback){
   self.enableAutoUpdate = function(){
     autoUpdateEnabled = true;
   }
+
+  loadResources(resources, function(err, resourceDataArg){
+    resourceObject = new ResourceObject(resourceDataArg);
+    resourceData = resourceDataArg;
+    console.log(resourceData);
+    callback(self);
+  });
 
   function ResourceObject(data, parent){ 
     var cache = {}; // todo: discuss to rename in children.

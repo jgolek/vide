@@ -1,0 +1,20 @@
+name: ButtonCreate
+elements:
+  -
+    name: element1
+    x: 0
+    y: 10
+    width: 500
+    height: 50
+    border: 0
+    pattern: ButtonCreate
+    patterndata:
+      objects:
+         type: domain
+         value: buttoncreate.objects
+
+pageObjects:
+  - 
+    name: buttoncreate
+    type: ButtonObject
+    url: data/buttoncreate
