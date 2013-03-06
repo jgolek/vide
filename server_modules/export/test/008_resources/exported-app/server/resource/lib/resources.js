@@ -49,6 +49,8 @@ function ResourceModelAdapter( Model, resourceName ){
 
   self.load = function(req, id, fn){
     console.log( "Find id:", typeof(id) );
+    console.log( "Query", req.query);
+
     Model.find(id, fn);
   }
 
@@ -61,7 +63,11 @@ function ResourceModelAdapter( Model, resourceName ){
   };
 
   self.create = function(req, res){
-    res.send('create forum');
+    console.log('create', req.body);
+    var data = req.body;
+    Model.create(data, function(err, data){
+      res.send(data);
+    }); 
   };
 
   self.show = function(req, res){
@@ -90,5 +96,6 @@ function ResourceModelAdapter( Model, resourceName ){
     res.send('destroy forum ' + req.params.forum);
   };
 }
+module.exports.ResourceModelAdapter = ResourceModelAdapter;
 
 

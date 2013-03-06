@@ -19,7 +19,7 @@ function LineChart(model){
   var self = this;
   self.model = model;
 
-  self.render = function(eleement, data){
+  self.render = function(element, data){
 
     var series = [];
 

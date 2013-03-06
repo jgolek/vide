@@ -59,6 +59,7 @@ function Resources(resources, callback){
     var cache = {}; // todo: discuss to rename in children.
     var self = this;
     self.url = data._url;
+    self.id = data.id;
 
     function useCache(fn) {
       return function(name, Type){
@@ -87,6 +88,10 @@ function Resources(resources, callback){
 
     self.getList = useCache(function(name, Type){
       return new ResourceList(data[name], Type, self );
+    });
+
+    self.getQuery = useCache(function(queryObject, Type){
+      return new ResourceQuery(queryObject, Type, self );
     });
 
     function update(name) {
@@ -127,15 +132,81 @@ function Resources(resources, callback){
     }
     var arrayObs = ko.observableArray(arrayWithTypes);
 
-    arrayObs.add = function(dto){
+    arrayObs.add = function(dto, callback){
       $.ajax({
         type: "POST",
         url: self.url,
         data: dto
       }).done( function(data) {
         data.url = self.url + "/" + data.id;
+        console.log("data", data);
         var type = createType(data, self, Type );
         arrayObs.push(type);
+        if(callback){
+          callback(type);
+        }
+      });
+    }
+
+    arrayObs.del = function(object){
+      $.ajax({
+        type: "DELETE",
+        url: object.url
+      }).done(function(data){
+        console.log("deleted!");
+        arrayObs.remove(object);
+      });
+    };
+
+    return arrayObs;
+  }
+
+  function ResourceQuery(queryObject, Type, parent){
+    var self = this;
+    //parseurl    
+    self.url = queryObject.url;
+
+    var urlWithQuery = self.url + "?";
+    var wheres = [];
+    for(var key in queryObject.where){
+      wheres.push(key + "="+ queryObject.where[key]);
+    }
+    urlWithQuery += wheres.join('&');
+    console.log(urlWithQuery);
+
+    var arrayObs = ko.observableArray();
+    $.ajax({
+      type: "GET",
+      url: urlWithQuery 
+    }).done( function(array){
+      console.log("GET", self.url, urlWithQuery, array);
+      var arrayWithTypes = [];
+      for(var i=0; i < array.length; i++){
+        array[i]._url = self.url + "/" + array[i].id;
+        var type = createType(array[i], self, Type );
+        arrayWithTypes.push(type);
+      }
+      console.log("GET", array);
+      arrayObs(arrayWithTypes);
+    });
+
+    arrayObs.add = function(dto, callback){
+      for(var key in queryObject.where){
+        dto[key] = queryObject.where[key];
+      }
+
+      $.ajax({
+        type: "POST",
+        url: self.url,
+        data: dto
+      }).done( function(data) {
+        data.url = self.url + "/" + data.id;
+        console.log("data", data);
+        var type = createType(data, self, Type );
+        arrayObs.push(type);
+        if(callback){
+          callback(type);
+        }
       });
     }
 

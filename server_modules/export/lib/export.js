@@ -115,8 +115,8 @@ module.exports = define(argsDefiniton, function(args, callback) {
     }
 
     function createData(callback){
-      if(applicationDefinition.dataDirectory){
-        fse.copy(applicationDefinition.dataDirectory, args.outputDirectory + '/resources/data', callback);
+      if(applicationDefinition.objectsDirectory){
+        fse.copy(applicationDefinition.objectsDirectory+"/data", args.outputDirectory + '/resources/data', callback);
       } else {
         callback();
       }

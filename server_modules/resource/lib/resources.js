@@ -54,14 +54,20 @@ function ResourceModelAdapter( Model, resourceName ){
 
   self.index = function(req, res){
     console.log('index');
+    console.log( "Query", req.query);
 
-    Model.all({order: 'id', limit: 10, skip: 20}, function(err, all){
+
+    Model.all({order: 'id', limit: 10, skip: 20, where: req.query }, function(err, all){
       res.send(all);
     });
   };
 
   self.create = function(req, res){
-    res.send('create forum');
+    console.log('create', req.body);
+    var data = req.body;
+    Model.create(data, function(err, data){
+      res.send(data);
+    }); 
   };
 
   self.show = function(req, res){

@@ -45,6 +45,20 @@ function initResource(resourceName){
 	var modelDefinition = JSON.parse(fs.readFileSync(directory+"/"+resourceName+"/model.def.json", "utf8"));
 	var Model = schema.define( resourceName, modelDefinition );
 
+	try{
+	var modelData = JSON.parse(fs.readFileSync(directory+"/"+resourceName+"/model.data.json", "utf8") || {});
+	if(modelData instanceof Array){
+		modelData.forEach(function(data){
+			Model.create(data);
+		});
+	}else{
+		odel.create(modelData);
+	}
+	}catch(ex){
+		//ignore
+	}
+
+
 	var resourceAdapter = new ResourceModelAdapter( Model, resourceName );
 	var resource = app.resource("resource/"+resourceName, resourceAdapter);
 	console.log('add route: ', "/resource/"+resourceName);
@@ -166,11 +180,11 @@ function buildTransformArgs(widgetName){
     page.requiredModules.push({ js: 'bootstrap/2.3.0/bootstrap.js',
                                 css:'bootstrap/2.3.0/bootstrap.css' });
     page.requiredModules.push({ css:'bootstrap/2.3.0/font-awesome.css' });
+    page.requiredModules.push({ js :'vide/knockout-with-jquery.js' });
+
 
 	var objectSource = new function(){
 		var self = this;
-
-
 
 		self.all = function(callback){
 			var result = [];

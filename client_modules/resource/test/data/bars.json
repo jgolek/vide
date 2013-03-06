@@ -1,0 +1,18 @@
+[
+	{
+		"name": "bar1",
+		"fooid": "1"
+	},
+	{
+		"name": "bar2",
+		"fooid": "2"
+	},
+	{
+		"name": "bar3",
+		"fooid": "2"
+	},
+	{
+		"name": "bar4",
+		"fooid": "1"
+	}
+]

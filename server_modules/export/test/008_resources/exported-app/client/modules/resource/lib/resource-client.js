@@ -33,14 +33,8 @@ function Resources(resources, callback){
         callback(null, resourceData);
       }
     }
+    done();
   };
-
-  loadResources(resources, function(err, resourceDataArg){
-    resourceObject = new ResourceObject(resourceDataArg);
-    resourceData = resourceDataArg;
-    console.log(resourceData);
-    callback(self);
-  });
 
   self.getObjectOrGetList = function(name, Type){
     if( resourceData[name] instanceof Array ){
@@ -53,6 +47,13 @@ function Resources(resources, callback){
   self.enableAutoUpdate = function(){
     autoUpdateEnabled = true;
   }
+
+  loadResources(resources, function(err, resourceDataArg){
+    resourceObject = new ResourceObject(resourceDataArg);
+    resourceData = resourceDataArg;
+    console.log(resourceData);
+    callback(self);
+  });
 
   function ResourceObject(data, parent){ 
     var cache = {}; // todo: discuss to rename in children.
@@ -126,15 +127,17 @@ function Resources(resources, callback){
     }
     var arrayObs = ko.observableArray(arrayWithTypes);
 
-    arrayObs.add = function(dto){
+    arrayObs.add = function(dto, callback){
       $.ajax({
         type: "POST",
         url: self.url,
         data: dto
       }).done( function(data) {
         data.url = self.url + "/" + data.id;
+        console.log("data", data);
         var type = createType(data, self, Type );
         arrayObs.push(type);
+        callback(type);
       });
     }
 

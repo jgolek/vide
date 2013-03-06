@@ -6,3 +6,4 @@ function House(data){
     return self.name();
   }
 }
+

@@ -33,14 +33,13 @@ var argsDefinition = {
 module.exports = function(args, callback){
 
   var pagebindingLines = [];
-
+  pagebindingLines.push('var pageinput = $.parseQuery(location.search);');
   pagebindingLines.push(buildPageModelLines(args.pageObjects) + "\n");
-
   pagebindingLines.push("function buildPageBindings(resources){");
   pagebindingLines.push(indent(buildResourcesVars(args.pageObjects), '  '));
   pagebindingLines.push(indent('resources.enableAutoUpdate();', '  '));
   pagebindingLines.push("");
-  pagebindingLines.push(indent('var pageinput = $.parseQuery(location.search);', '  ') + "\n" );
+  //pagebindingLines.push(indent('var pageinput = $.parseQuery(location.search);', '  ') + "\n" );
 
   pagebindingLines.push(indent(buildBindingLines(args), '  ') + "\n" );
   pagebindingLines.push(indent(buildPageBindingLines(args), '  '));
@@ -75,7 +74,17 @@ function buildPageModelLines(pageObjects){
   function buildResourceMapping(){
     var resourceLines = [];
     pageObjects.forEach(function(pageObject){
-      resourceLines.push('{ url: "'+pageObject.url+'", as: "'+pageObject.name+'" }')
+      var line;
+      if(pageObject.url.has(":")){
+        var urlParts = pageObject.url.split(":");
+        var url = urlParts[0];
+        var urlJs = urlParts[1];
+        line = '{ url: "'+url+'" + '+urlJs+', as: "'+pageObject.name+'" }';
+      }else{
+        line = '{ url: "'+pageObject.url+'", as: "'+pageObject.name+'" }';
+      }
+
+      resourceLines.push(line);
     });
     return resourceLines.join(",\n");
   }
