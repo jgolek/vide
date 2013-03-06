@@ -32,6 +32,16 @@ class Page
 	toJs: ->
 		pageToJs(this)
 
+	getRequiredTypes: -> 
+		requiredTypes = []
+		for widgets in @getRequiredWidgets()
+			requiredTypes.push type for type in widgets.requiredTypes
+		requiredTypes
+
+	getRequiredWidgets: ->
+		( element.widget for element in @elements )
+
+
 class Element
 	constructor: (model) ->
 		@name     = model.name ? "elementNameNotSet"

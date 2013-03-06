@@ -22,7 +22,6 @@ class Page
 	resource: (data) ->
 		resource = new Resource data
 		@resources.push resource
-		@resource[data.name] = resource.definition
 
 	toHtml: -> 
 		pageToHtml(this)
