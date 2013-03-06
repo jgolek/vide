@@ -36,7 +36,7 @@ findUniqueTypes =  (widgets) ->
 
 buildResouceBindings = (resource) ->
 	resourceBindingsTemplate =
-	"""        url: "#{resource.url}", as: "#{resource.name}" }"""
+	"""       { url: "#{resource.url}", as: "#{resource.name}" }"""
 
 buildBindPageModel = (resources) -> 
 	resourceBindings = "\n" + ( buildResouceBindings resource for resource in resources ).join(",\n")

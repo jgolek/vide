@@ -1,13 +1,15 @@
 
 pageToHtml = require './Page.html.coffee'
 pageToJs = require './Page.js.coffee'
-
 Resource = require './Resource'
-
 
 module.exports = 
 class Page
-	requiredModules: []
+	requiredModules: [
+		{ js: 'modules/jquery/jquery-1.7.1-min.js' },
+		{ js: 'modules/jquery/jquery.parsequery.js' },
+		{ js: 'modules/resource/lib/resource-client.js' }
+	]
 
 	constructor: (model) ->
 		throw Error 'model is not defined' if !model

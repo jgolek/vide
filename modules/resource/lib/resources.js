@@ -4,12 +4,13 @@ var importResources = require('./resources-import');
 
 var args = {
 	app: { type: 'App'},
-	directory: {type: 'string'}
+	directory: {type: 'string'},
+  model: {type: 'object'}
 }
 module.exports = function(args, callback){
 
 	var app = args.app;
-	var models = require(args.directory+'/resources-definition');
+	var models = args.models || require(args.directory+'/resources-definition');
   var routes = buildRoutes("resource", models);
 
   routes.forEach(function(route){

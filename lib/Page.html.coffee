@@ -1,13 +1,13 @@
 jade = require 'jade'
 
-compiledTemplate = jade.compile( template, pretty: true )
-
 module.exports = (page) ->
-	compiledTemplate(page: this, indent: indent)
+  console.log(page)
+  compiledTemplate = jade.compile( template, pretty: true )
+  console.log( compiledTemplate( page: page, indent: indent, elementsAsCss: elementsAsCss ) )
+  compiledTemplate( page: page, indent: indent, elementsAsCss: elementsAsCss )
 
-
-elementsAsCss = ->
-	lines = ( element.toCss() for element in @elements ) 
+elementsAsCss = (elements) ->
+	lines = ( element.toCss() for element in elements ) 
 	lines.join '\n'
 
 indent =  (str, prefix) -> "#{prefix}#{str}"	
@@ -18,7 +18,7 @@ doctype 5
 html
   head
     title= page.name
-    - var cssElements = indent(page.elementsAsCss(), '    ')
+    - var cssElements = indent(elementsAsCss(page.elements), '    ')
 
     style(type='text/css')
       .container {
@@ -34,13 +34,14 @@ html
       if module.css 
         link(href='#{module.css}', rel="stylesheet")
 
-    script(src='#{page.name.toLowerCase()}.js', type='text/javascript')
 
   body
     .container
       each element in page.elements
         div(id=element.name, data-bind="with: #{element.name}PatternInstance")
           !{element.widget.view}
+  script
+    !{page.toJs()}
   script
     var bindings = buildPageModel(applyBindings);
     function applyBindings(bindings){

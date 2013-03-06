@@ -4,5 +4,3 @@ class Type
 		@name = data.name
 		@js = data.js;
 		@requiredTypes = data.requiredTypes;
-		@definition = data.definition
-
