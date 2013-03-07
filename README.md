@@ -51,7 +51,7 @@ Application
 
 Types
 ----------------------------
-Are Also a resource!
+TODO
 
 
 
