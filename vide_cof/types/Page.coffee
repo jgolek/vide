@@ -4,7 +4,6 @@ pageToJs = require './Page.js.coffee'
 
 Resource = require './Resource'
 
-
 module.exports = 
 class Page
 	requiredModules: []

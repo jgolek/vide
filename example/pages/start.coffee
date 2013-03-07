@@ -6,30 +6,19 @@ page = new Page( name: 'start' )
 module.exports = page
 
 page.resource
-	name: "res1"
+	name: "users"
 	type: types.User
-	url: "/resource/res1"
+	url: "/resource/user"
 
 page.resource
-	name: "res2"
+	name: "userNew"
 	type: types.User
-	url: "/resource/res2"
+	url: "/resource/user/new"
 
 page.element 
 	name: "element1"
-	widget: widgets.Button.with({})
-
-page.element 
-	name: "element2"
-	widget: widgets.Table.with("resource:res1")
-
-page.element 
-	name: "element3"
-	widget: widgets.Table.with(
-			text1: "resource:res1.name"
-			text2: "resource:res1.name"
-			text3: "resource:res1"
-			text4: "element:res1"
-			text5: "static:res1"
-		)
-
+	width: 500
+	widget: widgets.Text.with(
+		name: "text:hallo Welt"
+	)
+		

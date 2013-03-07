@@ -8,7 +8,8 @@ class Page
 	requiredModules: [
 		{ js: 'modules/jquery/jquery-1.7.1-min.js' },
 		{ js: 'modules/jquery/jquery.parsequery.js' },
-		{ js: 'modules/resource/lib/resource-client.js' }
+		{ js: 'modules/resource/lib/resource-client.js' },
+		{ js: 'modules/knockoutjs/knockout-2.1.0.js' }
 	]
 
 	constructor: (model) ->
@@ -24,7 +25,6 @@ class Page
 	resource: (data) ->
 		resource = new Resource data
 		@resources.push resource
-		@resource[data.name] = resource.definition
 
 	toHtml: -> 
 		pageToHtml(this)
@@ -34,8 +34,12 @@ class Page
 
 	getRequiredTypes: -> 
 		requiredTypes = []
-		for widgets in @getRequiredWidgets()
-			requiredTypes.push type for type in widgets.requiredTypes
+		requiredTypes.add = (item) ->
+			requiredTypes.push item if this.indexOf(item) == -1
+
+		for resource in @resources
+			requiredTypes.add resource.type
+			requiredTypes.add type for type in resource.type.requiredTypes
 		requiredTypes
 
 	getRequiredWidgets: ->

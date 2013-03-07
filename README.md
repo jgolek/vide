@@ -16,12 +16,12 @@ app.coffee
 	app = new App
 
 	app.pages.login  = require './pages/login.coffee'
-	app.pages.main   = require './pages/main.cofee'
+	app.pages.main   = require './pages/main.coffee'
 
 	app.start ->
 		console.log "App started!"
 
-start.cofee
+main.coffee
 
 	Page    = require '../../lib/Page'
 	widgets = require '../widgets'
@@ -32,11 +32,11 @@ start.cofee
 	page.resource
 		name: "res1"
 		type: types.User
-		url: "/resource/res1"
+		url: "/resource/user"
 
 	page.element 
 		name: "element1"
-		widget: widgets.Table.with("resource:res1")
+		bind: widgets.Text.with("resource:res1")
 
 	module.exports = page
 
@@ -44,6 +44,16 @@ Run
 ----------------------------
 
 	coffee app.coffee
+
+
+Application
+----------------------------
+
+Types
+----------------------------
+Are Also a resource!
+
+
 
 
 

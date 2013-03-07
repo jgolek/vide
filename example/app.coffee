@@ -1,4 +1,3 @@
-types = require './types'
 App = require '../lib/App'
 
 app = new App

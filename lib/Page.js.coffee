@@ -6,7 +6,7 @@ module.exports = (page) ->
 	
 	console.log widgets
 
-	types = findUniqueTypes(widgets);
+	types =  page.getRequiredTypes()
 	console.log(types);
 	models = ( type.js for type in types ).join("\n")
 
@@ -26,13 +26,6 @@ module.exports = (page) ->
 	#{bindings}
 	//end
 	"""
-
-findUniqueTypes =  (widgets) -> 
-	types = {};
-	for requiredTypes in (widget.requiredTypes for widget in widgets)
-		types[type] = type for type in requiredTypes
-
-	(type for typeKey, type of types)
 
 buildResouceBindings = (resource) ->
 	resourceBindingsTemplate =
@@ -65,6 +58,8 @@ buildPageModelBinding = (resources, elements) ->
 
 	var_widget_bindings = (element.widget.buildBinding(element.name) for element in elements).join "\n"
 
+	var_bindings = buildBindings(elements)
+
 	"""
 	function buildPageBindings(resources){
 	  #{var_name_resources}
@@ -72,8 +67,19 @@ buildPageModelBinding = (resources, elements) ->
 
 	  #{var_widget_bindings}
 
+	  #{var_bindings}
+
 	}
 	"""
+buildBindings = (elements) ->
+	bindings = ( """   '#{element.name}PatternInstance': #{element.name}""" for element in elements ).join (',\n')
+	"""
+		var bindings = {
+		    #{bindings}
+		};
+		return bindings;
+	"""
+
 
 """
 	  var textoutputForElement1 = new Textoutput(

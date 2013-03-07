@@ -13,10 +13,13 @@ module.exports = class App
 		app = express()
 		app.use express.bodyParser()
 
+		memoryModels = {}
 
-		console.log("pages", @pages.start.getRequiredTypes())
+		for pageName, page of @pages
+			for type in page.getRequiredTypes()
+				memoryModels[type.name] = type.dbmodel
 
-		#resourcesAdapter app: app, models: memoryModels
+		resourcesAdapter app: app, models: memoryModels
 
 		app.get '/favicon.ico', (req, res) -> res.send()
 

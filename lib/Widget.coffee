@@ -38,8 +38,9 @@ class Widget
 		path = parts[1]
 		if(type == 'resource')
 			return path.split(".").join("().");
-		if(type == 'static')
+		if(type == 'static' or type == 'text')
 			return "'#{path}'"
 		if(type == 'element')
 			return "todo"
+
 

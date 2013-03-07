@@ -8,7 +8,16 @@ widgets = { Header: (x) -> console.log x }
 
 types = { User: (x) -> console.log x }
 
+resources.users = new Resource
+	type: types.User
+	url : "/resources/users"
+
+resources.user = new Resource
+	type: types.User
+	url : "/resources/user/:userid"
+
 start = name: start, elements: {}
+
 start.elements.header = 
 	height: 50
 	widget: 
@@ -19,13 +28,11 @@ start.elements.header =
 start.elements.selection = 
 	y: 80
 	widget: widgets.Combobox { 
-		items: resources.users
+		items: start.resources.users
 		selection: start.selectedUser
 	}
 
-resources.users = new Resource
-	type: User
-	url : "/resources/users"
+
 
 
 generate start

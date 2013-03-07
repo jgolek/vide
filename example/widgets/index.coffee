@@ -9,3 +9,7 @@ module.exports =
 		name: 'Table'
 		viewmodel: 'function Table(){}'
 		view: '<table></table>'
+	Text: new Widget
+		name: 'Text'
+		viewmodel: 'function Text(model){var self = this; self.model = model };'
+		view: '<span data-bind="text: model.name"></span>'

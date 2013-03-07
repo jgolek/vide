@@ -13,17 +13,19 @@ module.exports = function(args, callback){
 	var models = args.models || require(args.directory+'/resources-definition');
   var routes = buildRoutes("resource", models);
 
+  console.log (models)
+
   routes.forEach(function(route){
-    console.log("added route: " + route.url + " for model " + route.modelName);
+    console.log("added route: " + route.url + " for model " + route.modelName + ". Model: " + route.model );
     var resource = app.resource(route.url, new ResourceModelAdapter(route.model, route.resourceName ));
   });
 
-  importResources(
-    {
-      directory: args.directory + '/data',
-      models: models
-    }
-  );  
+  //importResources(
+  //  {
+  //    directory: args.directory + '/data',
+  //    models: models
+  //  }
+  //);  
 };
 
 function buildRoutes(baseUrl, models){
