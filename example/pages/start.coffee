@@ -18,7 +18,5 @@ page.resource
 page.element 
 	name: "element1"
 	width: 500
-	widget: widgets.Text.with(
-		name: "text:hallo Welt"
-	)
+	bind: widgets.Text.with( name: "text:hallo Welt" )
 		

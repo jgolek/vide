@@ -55,7 +55,7 @@ class Element
 		@x        = model.x ? 0
 		@border   = model.border ? 0
 		@position = model.position ? "absolute"
-		@widget   = model.widget ? html: ""
+		@widget   = model.widget ? model.bind ? html: ""
 
 	toCss: ->
 		"""
