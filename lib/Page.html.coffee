@@ -1,9 +1,7 @@
 jade = require 'jade'
 
 module.exports = (page) ->
-  console.log(page)
   compiledTemplate = jade.compile( template, pretty: true )
-  console.log( compiledTemplate( page: page, indent: indent, elementsAsCss: elementsAsCss ) )
   compiledTemplate( page: page, indent: indent, elementsAsCss: elementsAsCss )
 
 elementsAsCss = (elements) ->

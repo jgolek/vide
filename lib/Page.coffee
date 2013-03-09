@@ -2,6 +2,8 @@
 pageToHtml = require './Page.html.coffee'
 pageToJs = require './Page.js.coffee'
 Resource = require './Resource'
+Element = require './Element'
+
 
 module.exports = 
 class Page
@@ -18,6 +20,8 @@ class Page
 		@name = model.name
 		@elements = model.elements ? []
 		@resources = []
+		@requiredModules.push module for module in model.requiredModules ? []
+		console.log @requiredModules
 
 	element: (data) -> 
 		@elements.push new Element data
@@ -34,38 +38,15 @@ class Page
 
 	getRequiredTypes: -> 
 		requiredTypes = []
-		requiredTypes.add = (item) ->
-			requiredTypes.push item if this.indexOf(item) == -1
 
+		add = (item) ->
+			requiredTypes.push item if requiredTypes.indexOf(item) == -1
+			
 		for resource in @resources
-			requiredTypes.add resource.type
-			requiredTypes.add type for type in resource.type.requiredTypes
+			add resource.type
+			add type for type in resource.type.requiredTypes ? []
 		requiredTypes
 
 	getRequiredWidgets: ->
 		( element.widget for element in @elements )
-
-
-class Element
-	constructor: (model) ->
-		@name     = model.name ? "elementNameNotSet"
-		@width    = model.width   ? 100
-		@height   = model.height ? 100
-		@y        = model.y ? 0
-		@x        = model.x ? 0
-		@border   = model.border ? 0
-		@position = model.position ? "absolute"
-		@widget   = model.widget ? model.bind ? html: ""
-
-	toCss: ->
-		"""
-		  ##{@name} {
-		     width:    #{@width}px;
-		     height:   #{@height}px;
-		     top:      #{@y}px;
-		     left:     #{@x}px;
-		     position: #{@position};
-		     border:   #{@border}px solid;
-		  }
-		"""
 

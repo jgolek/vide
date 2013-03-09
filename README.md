@@ -49,10 +49,46 @@ Run
 Application
 ----------------------------
 
+Pages and Elements
+----------------------------
+Element
+
+	page.element
+		name: "element1"
+		bind: widgets.Text.with("resource:res1")
+	page.element
+		name: "element2"
+		bind: widgets.Text.with(
+			property1: "text:hello world"
+			property2: "resource:res1"
+			property3: "element:element1.text"
+		)
+
+
+Bindings (syntax:'binding':'value' ) 
+
+- text: text 
+- resource: resource name
+- element: element name
+
+
+Widgets
+----------------------------
+TODO
+
+	< widget name >
+    ├── view.html
+    └── viewmodel.js
+
 Types
 ----------------------------
 TODO
 
+
+Development
+---------------------------
+
+	nodemon -e .coffee -w . -x coffee example/app.coffee
 
 
 

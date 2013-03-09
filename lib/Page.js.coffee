@@ -4,10 +4,7 @@ module.exports = (page) ->
 	widgets = ( element.widget for element in page.elements )
 	viewmodels = ( widget.viewmodel for widget in widgets ).join("\n")
 	
-	console.log widgets
-
 	types =  page.getRequiredTypes()
-	console.log(types);
 	models = ( type.js for type in types ).join("\n")
 
 	resourceBinding = buildBindPageModel(page.resources)
@@ -56,7 +53,7 @@ buildVarResourceBinding = (resource) ->
 buildPageModelBinding = (resources, elements) ->
 	var_name_resources = "\n" + (buildVarResourceBinding resource for resource in resources).join "\n"
 
-	var_widget_bindings = (element.widget.buildBinding(element.name) for element in elements).join "\n"
+	var_widget_bindings = ( element.toJs() for element in elements).join "\n"
 
 	var_bindings = buildBindings(elements)
 
@@ -78,53 +75,4 @@ buildBindings = (elements) ->
 		    #{bindings}
 		};
 		return bindings;
-	"""
-
-
-"""
-	  var textoutputForElement1 = new Textoutput(
-	    {
-	      'text': manager().name
-	    }
-	  );
-	  
-	  var listForElement2 = new List(
-	    {
-	      'items': houses,
-	      'selectByName': pageinput.selectedItem
-	    }
-	  );
-	  
-	  var textinputForElement3 = new Textinput(
-	    {
-	      'text': ko.observable()
-	    }
-	  );
-	  var updatetexttextinputForElement3 = function(data){
-	    textinputForElement3.model.text(data.name);
-	  };
-	  listForElement2.pattern.selected.subscribe(updatetexttextinputForElement3);
-	  updatetexttextinputForElement3(listForElement2.pattern.selected());
-	  
-	  
-	  var textoutputForElement4 = new Textoutput(
-	    {
-	      'text': ko.observable()
-	    }
-	  );
-	  var updatetexttextoutputForElement4 = function(data){
-	    textoutputForElement4.model.text(data.name);
-	  };
-	  listForElement2.pattern.selected.subscribe(updatetexttextoutputForElement4);
-	  updatetexttextoutputForElement4(listForElement2.pattern.selected());
-	  
-
-	  var bindings = {
-	    'element1PatternInstance': textoutputForElement1,
-	    'element2PatternInstance': listForElement2,
-	    'element3PatternInstance': textinputForElement3,
-	    'element4PatternInstance': textoutputForElement4
-	  };
-	  return bindings;
-	}
 	"""

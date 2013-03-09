@@ -8,6 +8,7 @@ module.exports = class App
 	start: (callback) ->
 		express = require 'express'
 		fs = require 'fs'
+		path = require 'path'
 		resourcesAdapter = require '../modules/resource'
 
 		app = express()
@@ -31,6 +32,10 @@ module.exports = class App
 			filePath = __dirname + '/../' + req.url
 			#console.log 'file path', filePath
 			fs.readFile filePath, 'utf8', (err, file) ->
+				switch path.extname(filePath)
+					when '.js' then res.set('Content-Type', 'text/javascript');
+					when '.css' then res.set('Content-Type', 'text/css');
+				
 				res.send file ? err
 
 		app.listen 3000, callback
