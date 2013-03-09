@@ -88,7 +88,7 @@ TODO
 Development
 ---------------------------
 
-	nodemon -e .coffee -w . -x coffee example/app.coffee
+	nodemon -e .coffee -w . -x coffee example/demo/app.coffee
 
 
 
