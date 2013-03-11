@@ -17,7 +17,7 @@ module.exports = (page) ->
 	// Models
 	#{models}
 	// Bindings
-	var pageinput = $.parseQuery(location.search);
+	var params = $.parseQuery(location.search);
 	#{resourceBinding}
 
 	#{bindings}
@@ -25,8 +25,16 @@ module.exports = (page) ->
 	"""
 
 buildResouceBindings = (resource) ->
+
+	urlParts = resource.url.split(':')
+	url = urlParts[0]
+	params = ""
+
+	if urlParts.length == 2 then params = " + #{urlParts[1]}"
+	
+
 	resourceBindingsTemplate =
-	"""       { url: "#{resource.url}", as: "#{resource.name}" }"""
+	"""       { url: "#{url}"#{params}, as: "#{resource.name}" }"""
 
 buildBindPageModel = (resources) -> 
 	resourceBindings = "\n" + ( buildResouceBindings resource for resource in resources ).join(",\n")

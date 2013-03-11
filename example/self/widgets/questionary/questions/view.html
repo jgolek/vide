@@ -1,0 +1,38 @@
+<!-- ko foreach: categories -->
+
+<h3 data-bind='text: title'> </h3>
+
+<!-- ko foreach: $data.subcategories -->
+<table class="table table-hover table-striped">
+  <thead>
+    <tr> 
+      <th data-bind='text: $data.title' style="width:100%"></th>
+      <th> A </th>
+      <th> B </th>
+      <th> C </th>
+      <th> D </th>
+    <tr>
+  </thead>
+  <tbody data-bind='foreach: $data.questions'>
+   <tr data-bind='with: $parents[2].createResultForQuestion($data.id)'>
+     <td data-bind='text: $data.text'> </td>
+     <td> <input type="radio" value="a" data-bind="checked: result"> </input> </td>
+     <td> <input type="radio" value="b" data-bind="checked: result"> </input> </td>
+     <td> <input type="radio" value="c" data-bind="checked: result"> </input> </td>
+     <td> <input type="radio" value="d" data-bind="checked: result"> </input> </td>
+   </tr>
+  </tbody>
+</table>
+
+<!-- /ko -->
+
+<!-- /ko -->
+
+<hr>
+<p class='pull-right'>
+  <button class="btn btn-large" type="button"><i class='icon-remove icon-large'></i> <span data-bind='text: label.abort'><span></button>
+  <button class="btn btn-large btn-primary" type="button" 
+      data-bind='click: save'>
+    <i class='icon-ok icon-large'></i> <span data-bind='text: label.next'><span>
+  </button>
+</p>

@@ -71,6 +71,28 @@ Bindings (syntax:'binding':'value' )
 - resource: resource name
 - element: element name
 
+Resource
+
+	page.resource
+		name: "user1"
+		type: types.User
+		url: "/resource/user/1"
+
+	page.resource
+		name: "user2"
+		type: types.User
+		url: "/resource/user/:params.param1"
+
+	page.resource
+		name: "user3"
+		type: types.User
+		url: "/resource/user/:params.param2"
+
+
+Url Params: 
+eg. 
+	/<page>?param1=foo&param2=bar
+
 
 Widgets
 ----------------------------

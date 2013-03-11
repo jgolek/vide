@@ -11,7 +11,9 @@ class Page
 		{ js: 'modules/jquery/jquery-1.7.1-min.js' },
 		{ js: 'modules/jquery/jquery.parsequery.js' },
 		{ js: 'modules/resource/lib/resource-client.js' },
-		{ js: 'modules/knockoutjs/knockout-2.1.0.js' }
+		{ js: 'modules/knockoutjs/knockout-2.1.0.js' },
+		{ js: 'modules/bootstrap/2.3.0/bootstrap.js', css: 'modules/bootstrap/2.3.0/bootstrap.css' },
+		{ css: 'modules/bootstrap/2.3.0/font-awesome.css' }
 	]
 
 	constructor: (model) ->

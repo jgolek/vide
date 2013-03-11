@@ -53,6 +53,8 @@ class Element
 			targetProperty = paths[1]
 			subscribes.push name: name, path: path, targetElement: targetElement, targetProperty: targetProperty
 			return "ko.observable()"
+		if(type == 'js')
+			return "#{path}"
 
 	buildSubscribe: (subscribes) ->
 		if subscribes.length == 0 then return ""

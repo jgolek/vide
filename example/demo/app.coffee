@@ -1,4 +1,4 @@
-App = require '../lib/App'
+App = require '../../lib/App'
 
 app = new App
 

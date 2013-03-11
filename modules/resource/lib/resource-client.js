@@ -96,14 +96,14 @@ function Resources(resources, callback){
 
     function update(name) {
       return function(object) {
+        if(!self.url) { console.log('ignore update: self.url is not defined'); return; }
         console.log("data: ", data);
         console.log("UPDATE: ", self.url, object);
         if(!autoUpdateEnabled) return;
 
-        var dto = {
-          name: object
-        };
-
+        var dto = {};
+        dto[name] = object;
+        
         $.ajax({
           type: "PUT",
           url: self.url,
@@ -117,6 +117,23 @@ function Resources(resources, callback){
     console.log("TYPEDATA", dataArg);
     var typeData = new ResourceObject(dataArg, parent );
     var type = new Type(typeData);
+
+    type.create = function(dto, callback){
+
+        var parts = typeData.url.split('/');
+        parts.pop();
+
+        $.ajax({
+          type: "POST",
+          url: parts.join('/'),
+          data: dto
+        }).done( function(data) {
+          if(callback){
+            callback(data);
+          }
+          console.log ("SAVE->POST");
+        });
+    }
     return type;
   }
 

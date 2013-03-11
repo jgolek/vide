@@ -1,5 +1,5 @@
-Widget = require '../../lib/Widget'
-FsWidget = require '../../lib/FsWidget'
+Widget = require '../../../lib/Widget'
+FsWidget = require '../../../lib/FsWidget'
 
 module.exports = 
 	Button: new Widget
@@ -16,7 +16,17 @@ module.exports =
 		view: '<span data-bind="text: model.name"></span>'
 	Header: new FsWidget 
 		name: 'Header', directory: __dirname + '/header'
+	Combobox: new FsWidget 
+		name: 'Combobox', directory: __dirname + '/combobox'
+	ButtonWithAddAndDelete: new FsWidget 
+		name: 'ButtonWithAddAndDelete', directory: __dirname + '/buttons/CreateAndDelete'
 
-	requiredModules : [
-		{ js: 'modules/bootstrap/2.3.0/bootstrap.js', css: 'modules/bootstrap/2.3.0/bootstrap.css' }
-	]
+	ButtonDefault: new FsWidget 
+		name: 'ButtonDefault', directory: __dirname + '/buttons/Default'
+
+	QuestionaryQuestions: new FsWidget 
+		name: 'QuestionaryQuestions', directory: __dirname + '/questionary/questions'
+	QuestionaryHeader: new FsWidget 
+		name: 'QuestionaryHeader', directory: __dirname + '/questionary/header'
+
+	requiredModules : []
