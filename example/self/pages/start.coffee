@@ -35,7 +35,7 @@ page.element
 	y: 200
 	bind: widgets.ButtonDefault.with( 
 		name: 'static: Fragebogen starten'
-		link: 'js:function(){ return "/questionary1?userId=1&teenId="+helper().selected().id }'
+		link: 'js:ko.computed(function(){ return "/questionary1?userId=1&teenId="+helper().selected().id })'
 	)
 
 page.element
