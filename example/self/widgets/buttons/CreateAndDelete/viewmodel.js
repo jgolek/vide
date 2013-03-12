@@ -1,4 +1,8 @@
-
+/**
+ * ButtonWithAddAndDelete
+ *
+ * @param {[]} html model.objects
+ */
 function ButtonWithAddAndDelete(model){
   var self = this;
   self.model = model;

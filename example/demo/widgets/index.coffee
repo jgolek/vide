@@ -1,5 +1,5 @@
-Widget = require '../../lib/Widget'
-FsWidget = require '../../lib/FsWidget'
+Widget = require '../../../lib/Widget'
+FsWidget = require '../../../lib/FsWidget'
 
 module.exports = 
 	Button: new Widget

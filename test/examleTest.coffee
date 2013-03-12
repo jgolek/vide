@@ -1,5 +1,5 @@
 
-startPage = require '../example/pages/start'
+startPage = require '../example/demo/pages/start'
 
 exports.testStartPage = (test) ->
 

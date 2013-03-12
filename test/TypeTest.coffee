@@ -19,9 +19,10 @@ exports.testCreate = (test) ->
 	expectedJsModel = 
 		"""
 		function TestType(data){
+		    this.id = data.id;
+
 		    this.name = data.get('name');
 		}
 		"""
-
 	test.equals expectedJsModel, type.js 
 	test.done()

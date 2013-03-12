@@ -1,4 +1,12 @@
-function ButtonDefault(model){
+
+/**
+ * Button Default
+ *
+ * @param {String}    model.name
+ * @param {String}    model.icon 
+ * @param {Function}  model.link
+ */
+function ViewModel(model){
 	var self = this;
 	self.model = model;
 

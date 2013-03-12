@@ -1,4 +1,4 @@
-Page = require '../../lib/Page'
+Page = require '../../../lib/Page'
 widgets = require '../widgets'
 types   = require '../types'
 

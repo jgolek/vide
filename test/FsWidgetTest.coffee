@@ -1,10 +1,20 @@
 FsWidget = require '../lib/FsWidget'
 
 exports.testNew = (test) ->
-	DemoFsWidget = new FsWidget 
+	fsWidget = new FsWidget 
 		name: 'DemoWidget'
 		directory: __dirname + "/widget_demo"
 
-	test.equal '//js', 			DemoFsWidget.viewmodel
-	test.equal '<!-- html -->', DemoFsWidget.view
+	test.equal 'function Widget(model){}',	fsWidget.viewmodel
+	test.equal '<!-- html -->', 			fsWidget.view
+
+	test.ok fsWidget.model.p1
+	test.ok fsWidget.model.p2
+
+	bindings = 
+		p1: 'static:   test'
+		p2: 'resource: test'
+
+	fsWidget.with(bindings)
+
 	test.done()

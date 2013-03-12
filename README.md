@@ -58,12 +58,11 @@ Element
 		bind: widgets.Text.with("resource:res1")
 	page.element
 		name: "element2"
-		bind: widgets.Text.with(
+		bind: widgets.Text, with: {
 			property1: "text:hello world"
 			property2: "resource:res1"
 			property3: "element:element1.text"
-		)
-
+		}
 
 Bindings (syntax:'binding':'value' ) 
 
@@ -99,8 +98,25 @@ Widgets
 TODO
 
 	< widget name >
-    ├── view.html
-    └── viewmodel.js
+    ├── view.html
+    └── viewmodel.js
+
+Viewmodel( e.g Table )
+
+	/**
+	 * Table 
+	 *
+	 * @param {[Object]} model.items
+	 * @param {[String]} model.header
+	 */
+	function Table(model){
+		this.items = model.items
+		this.header = model.header
+	};
+
+View
+	html
+
 
 Types
 ----------------------------

@@ -9,9 +9,11 @@ exports.testGetRequiredTypes = (test) ->
 	page.resource
 		name: "demo1"
 		type: mockType1
+		url: "/"
 	page.resource
 		name: "demo2"
 		type: mockType3
+		url: "/"
 
 	test.deepEqual [ mockType1, mockType3 ], ( resource.type for resource in page.resources )
 
@@ -24,6 +26,7 @@ exports.testToHml = (test) ->
 	page.resource
 		name: "demo1"
 		type: mockType1
+		url: "/"
 
 	page.element
 		name: "element1"

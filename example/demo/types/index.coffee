@@ -1,4 +1,4 @@
-Type = require '../../lib/Type'
+Type = require '../../../lib/Type'
 
 Schema = require('jugglingdb').Schema;
 schema = new Schema('memory');
