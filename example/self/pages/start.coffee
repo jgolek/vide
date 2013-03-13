@@ -8,7 +8,7 @@ module.exports = page
 page.resource
 	name: "teens"
 	type: types.Teen
-	url: "/resource/teen"
+	url: "/resource/teen"	
 
 page.resource
 	name: "helper"
@@ -37,10 +37,21 @@ page.element
 page.element
 	name: "start_questionary"
 	width: 300
-	y: 200
+	y: 250
 	bind: widgets.ButtonDefault.with( 
 		name: 'static: Fragebogen starten'
 		link: 'js:ko.computed(function(){ return "/questionary1?userId=1&teenId="+helper().selected().id })'
+		icon: 'static:icon-edit icon-large'
+	)
+
+page.element
+	name: "start_trend"
+	width: 300
+	y: 400
+	bind: widgets.ButtonDefault.with( 
+		name: 'static: Entwicklungsverlauf'
+		link: 'js:ko.computed(function(){ return "/trend?teenId="+helper().selected().id })'
+		icon: 'static:icon-bar-chart icon-large'
 	)
 
 page.element
@@ -53,8 +64,8 @@ page.element
 page.element
 	name: "teen_history"
 	width: 400
-	y: 200
+	y: 250
 	x: 500
 	bind: widgets.Table.with( 
-		items: 'resource: helper.selected.results'
+		items: 'js:ko.computed(function(){ return helper().selected().results; })'
 	)

@@ -47,7 +47,7 @@ module.exports =
 
 	Helper: new Type
 		name: 'Helper'
-		js: "function Helper(data){this.selected = ko.observable() }"
+		js: require('./Helper').toString()
 		dbmodel: schema.define('Helper', {
 			name: { type: String, default: 'no name' }
 		})
@@ -62,7 +62,16 @@ QuestionaryResult = module.exports.QuestionaryResult
 QuestionaryResult.dbmodel.create
 	teenId: 1
 	userId: 1
-	date: '12.3.2013 20:02:10'
+	date: 'Wed Mar 12 2013 14:58:23'
+	teen: { q1: "c" }
+	user: { q1: "b" }
+
+QuestionaryResult.dbmodel.create
+	teenId: 1
+	userId: 1
+	date: 'Wed Mar 13 2013 14:58:23'
+	teen: { q1: "a" }
+	user: { q1: "a" }
 
 Questionary = module.exports.Questionary
 Questionary.dbmodel.create 

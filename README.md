@@ -114,6 +114,16 @@ Viewmodel( e.g Table )
 		this.header = model.header
 	};
 
+ViewModel and Html Element Binding
+
+	to get access to th the html Element where this is bind to then add an init method. 
+	this is usfull if you want to use jquery and other 
+
+		function Table(model){
+			this.init = function(htmlElement){
+
+			}
+		};
 View
 	html
 

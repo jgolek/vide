@@ -45,5 +45,15 @@ html
     function applyBindings(bindings){
       ko.applyBindings(bindings);
     }
+  script
+    ko.bindingHandlers.bind = {
+      init : function(element, valueAccessor, allBindingsAccessor, value) {
+        var fn = valueAccessor();
+        //if(widgetInstance && widgetInstance.init){
+        //  widgetInstance.init(element);
+        //}
+        fn(element);
+      }
+    };
 '''
 	

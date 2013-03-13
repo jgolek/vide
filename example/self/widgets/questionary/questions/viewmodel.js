@@ -44,7 +44,7 @@ function QuestionaryQuestions(model){
       teenId: model.teen().id,
       userId: model.user().id,
   		teen: {},
-  		date: new Date().toLocaleString()
+  		date: new Date().toString()
   	}
 
   	for(var id in self.results){
@@ -67,3 +67,4 @@ function QuestionaryQuestions(model){
 	  }
   }
 }
+

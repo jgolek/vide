@@ -33,4 +33,9 @@ module.exports =
 	QuestionaryHeaderStatic: new FsWidget 
 		name: 'QuestionaryHeaderStatic', directory: __dirname + '/questionary/header_static'
 
-	requiredModules : []
+	LineChart: new FsWidget 
+		name: 'LineChart', directory: __dirname + '/highcharts/line'
+
+	requiredModules : [
+		js: "modules/highcharts-2.3.5/js/highcharts.js"
+	]
