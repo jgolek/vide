@@ -15,6 +15,11 @@ page.resource
 	type: types.Helper
 	url: "/resource/helper/new"
 
+page.resource
+	name: "questionaryresult"
+	type: types.QuestionaryResult
+	url: "/resource/questionaryresult/new"
+
 page.element
 	name: "header"
 	width: 900
@@ -45,4 +50,11 @@ page.element
 	x: 500
 	bind: widgets.ButtonWithAddAndDelete.with( objects: 'resource:teens' )
 
-
+page.element
+	name: "teen_history"
+	width: 400
+	y: 200
+	x: 500
+	bind: widgets.Table.with( 
+		items: 'resource: helper.selected.results'
+	)

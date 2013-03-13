@@ -38,9 +38,11 @@ module.exports =
 	QuestionaryResult: new Type
 		name: 'QuestionaryResult'
 		model: {
-			date: { type: String },
-			teen: { type: Schema.JSON },
-			user: { type: Schema.JSON }
+			date:   { type: String },
+			teenId: { type: String },
+			teen:   { type: Schema.JSON },
+			user:   { type: Schema.JSON },
+			userId: { type: String }
 		}
 
 	Helper: new Type
@@ -55,6 +57,12 @@ User.dbmodel.create name: 'DemoUser'
 
 Teen = module.exports.Teen
 Teen.dbmodel.create name: 'DemoTeen'
+
+QuestionaryResult = module.exports.QuestionaryResult
+QuestionaryResult.dbmodel.create
+	teenId: 1
+	userId: 1
+	date: '12.3.2013 20:02:10'
 
 Questionary = module.exports.Questionary
 Questionary.dbmodel.create 

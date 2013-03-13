@@ -134,6 +134,21 @@ function Resources(resources, callback){
           console.log ("SAVE->POST");
         });
     }
+
+    type.save = function(dto, callback){
+
+        $.ajax({
+          type: "PUT",
+          url: typeData.url,
+          data: dto
+        }).done( function(data) {
+          if(callback){
+            callback(data);
+          }
+          console.log ("SAVE->PUT");
+        });
+    }
+
     return type;
   }
 

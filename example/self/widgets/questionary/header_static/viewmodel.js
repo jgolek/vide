@@ -1,6 +1,6 @@
 
 
-function QuestionaryHeader(model){
+function QuestionaryHeaderStatic(model){
   var self = this;
   self.model = model;
 

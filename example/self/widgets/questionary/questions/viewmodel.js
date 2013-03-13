@@ -1,37 +1,56 @@
-
+/**
+  * Questionary
+  * @param {Object} model.questionary
+  * @param {Object} model.result
+  * @param {String} model.editor teen or user
+  */
 function QuestionaryQuestions(model){
   var self = this;
   self.model = model;
 
   self.categories = model.questionary().categories();
-  console.log(self);
-
 
   self.label = {
     abort: "Abbrechen",
     next: model.nextText || "Speichern"
   }
 
-  self.results = []
+  self.editable = model.editable == "true";
+
+  self.results = {};
+
+  if(model.result()[model.editor] && model.result()[model.editor]()){
+    self.results = model.result()[model.editor]();
+  }
 
   self.createResultForQuestion = function(questionId){
-  	var resultObj = { questionId: questionId, text: 'test', result: ko.observable() }
-  	self.results.push(resultObj);
+    var resultValue = undefined;
+    if(self.results[questionId]){
+      resultValue = self.results[questionId];
+    }
+
+  	var resultObj = { questionId: questionId, result: ko.observable(resultValue) }
+  	self.results[questionId] = resultObj;
   	return resultObj;
+  }
+
+  self.abort = function(){
+    window.open( "/start", '_self', false )
   }
 
   self.save = function(){
 
   	var resultDto = {
+      teenId: model.teen().id,
+      userId: model.user().id,
   		teen: {},
   		date: new Date().toLocaleString()
   	}
 
-  	self.results.forEach(function(resultObj){
+  	for(var id in self.results){
+      var resultObj = self.results[id];
   		resultDto.teen[resultObj.questionId] = resultObj.result()
-  	});
-
-  	console.log( model.result().id );
+    }
 
   	if( model.result().id == null ){
 	  	model.result().create(resultDto, function(data){
@@ -41,10 +60,10 @@ function QuestionaryQuestions(model){
 	  			'_self', false)
 	  	})  		
 	  } else {
-	  	console.log(resultDto.teen)
-	  	model.result().user(resultDto.teen);
-  		window.open(
-  			model.link+'?userId='+model.user().id+'&teenId='+model.teen().id, '_self', false)	  	
+      model.result().save({user: resultDto.teen}, function(data){
+        window.open(
+          model.link+'?userId='+model.user().id+'&teenId='+model.teen().id, '_self', false)          
+      })
 	  }
   }
 }

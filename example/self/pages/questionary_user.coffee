@@ -45,6 +45,7 @@ page.element
 		editor: 'resource: user'
 		alertType: 'static:success'
 		link: 'static:start'
+		pretext: 'text: Auszufüllen von'
 	 )
 
 page.element
@@ -58,4 +59,7 @@ page.element
 		link: 'static:start'
 		user: 'resource: user'
 		teen: 'resource: teen'
+		editable: 'static:true'
+		editor: 'static:user'
+		nextText: 'static:abschließen'
 	)

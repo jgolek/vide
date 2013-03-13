@@ -5,7 +5,7 @@
  * @param {String}    model.name
  * @param {Function}  model.link
  */
-function ButtonDefault(model){
+function ButtonLink(model){
 	var self = this;
 	self.model = model;
 

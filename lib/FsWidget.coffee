@@ -9,7 +9,9 @@ class FsWidget extends Widget
 		if(!data.directory) then throw new Error "directory isn't set"
 		super(data)
 
-		@view = fs.readFileSync(data.directory + '/view.html', 'utf8')
+		viewfile = data.view || 'view'
+
+		@view = fs.readFileSync(data.directory + '/'+viewfile+'.html', 'utf8')
 		js = fs.readFileSync(data.directory + '/viewmodel.js', 'utf8')
 
 		doxObj = dox.parseComments(js)
