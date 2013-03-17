@@ -136,7 +136,7 @@ TODO
 Development
 ---------------------------
 
-	nodemon -e .coffee -w . -x coffee example/demo/app.coffee
+	nodemon -e .coffee -w . -x coffee app.coffee
 
 
 

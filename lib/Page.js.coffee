@@ -30,7 +30,7 @@ buildResouceBindings = (resource) ->
 	url = urlParts[0]
 	params = ""
 
-	if urlParts.length == 2 then params = " + #{urlParts[1]}"
+	if urlParts.length > 1 then params = " + #{urlParts.shift(); urlParts.join(':')}"
 	
 
 	resourceBindingsTemplate =

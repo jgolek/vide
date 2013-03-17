@@ -21,12 +21,12 @@ function Resources(resources, callback){
     resourcesArgs.forEach(function(resource){ loadResource(resource, done); });
 
     function loadResource(resource, callback){
-      $.get(resource.url, function(data){
-        resourceData[resource.as] = data;
-        resourceData[resource.as]._url = resource.url;
-        loadedResources.push(resource.as);
-        callback();
-      }); 
+        $.get(resource.url, function(data){
+          resourceData[resource.as] = data;
+          resourceData[resource.as]._url = resource.url;
+          loadedResources.push(resource.as);
+          callback();
+        });
     }
 
     function done(){

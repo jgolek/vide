@@ -1,8 +1,9 @@
 
 module.exports = class App
 
-	constructor: ->
+	constructor: (data) ->
 		@pages = {}
+		#@pagesDirectory = data.pagesDirectory
 		console.log 'start app'
 
 	start: (callback) ->
@@ -26,7 +27,11 @@ module.exports = class App
 
 		app.get '/:page', (req, res) =>
 			#console.log 'page:', @pages[req.params.page] # TODO validation
-			res.send @pages[req.params.page].toHtml()
+			if @pagesDirectory 
+				res.send require(@pagesDirectory+'/'+req.params.page+'.coffee').toHtml()
+			else
+				res.send @pages[req.params.page].toHtml()
+			
 
 		app.use express.static(__dirname + "/../")
 

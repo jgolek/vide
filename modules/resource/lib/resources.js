@@ -49,7 +49,7 @@ function ResourceModelAdapter( Model, resourceName ){
   };
 
   self.load = function(req, id, fn){
-    console.log( "Find id:", typeof(id) );
+    console.log( "Find id:", id, typeof(id) );
     Model.find(id, fn);
   }
 
@@ -72,7 +72,8 @@ function ResourceModelAdapter( Model, resourceName ){
   };
 
   self.show = function(req, res){
-    console.log('get');
+
+    console.log('get', req[resourceName]);
     res.send(req[resourceName]);
   };
 

@@ -39,13 +39,6 @@ html
         div(id=element.name, data-bind="with: #{element.name}PatternInstance")
           !{element.widget.view}
   script
-    !{page.toJs()}
-  script
-    var bindings = buildPageModel(applyBindings);
-    function applyBindings(bindings){
-      ko.applyBindings(bindings);
-    }
-  script
     ko.bindingHandlers.bind = {
       init : function(element, valueAccessor, allBindingsAccessor, value) {
         var fn = valueAccessor();
@@ -55,5 +48,12 @@ html
         fn(element);
       }
     };
+  script
+    !{page.toJs()}
+  script
+    var bindings = buildPageModel(applyBindings);
+    function applyBindings(bindings){
+      ko.applyBindings(bindings);
+    }
 '''
 	
