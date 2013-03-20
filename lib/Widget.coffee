@@ -4,8 +4,8 @@ module.exports =
 class Widget
 	constructor: (data) ->
 		@name = data.name
-		@view = data.view
-		@viewmodel = data.viewmodel
+		@view = data.view 
+		@viewmodel = data.viewmodel || "function #{data.name}(){}"
 		@model = data.model ? {}
 		@bindings = data.bindings
 		@requiredTypes = data.requiredTypes ? []

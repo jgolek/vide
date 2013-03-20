@@ -41,8 +41,8 @@ class Element
 
 	buildPath: (binding, name, subscribes) ->
 		parts = binding.split ":"
-		type = parts[0]
-		path = parts[1]
+		type = parts.shift()
+		path = parts.join(':')
 		if(type == 'resource')
 			return path.split(".").join("().");
 		if(type == 'static' or type == 'text')

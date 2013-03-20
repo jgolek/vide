@@ -17,4 +17,3 @@ function Table(model){
 		//return "/questionary_static?userId=1&teenId=1&resultId=1"
 	}
 };
-

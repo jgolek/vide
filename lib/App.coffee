@@ -1,10 +1,23 @@
 
 module.exports = class App
 
+	#
+	# data.appDirectory 
+	#
 	constructor: (data) ->
 		@pages = {}
-		#@pagesDirectory = data.pagesDirectory
+		@startPage = data?.startPage || 'start'
+		if data?.directory
+			@appDirectory = data.directory
+			@pagesDirectory = data.directory + '/pages/'
+
 		console.log 'start app'
+
+	loadPage: (pageName) ->
+		@pages[pageName].toHtml()
+
+	loadRootPage: () ->
+		@loadPage(@startPage)
 
 	start: (callback) ->
 		express = require 'express'
@@ -25,15 +38,21 @@ module.exports = class App
 
 		app.get '/favicon.ico', (req, res) -> res.send()
 
+		app.get '/', (req, res) => 
+			res.send @loadRootPage(req.query)
+
 		app.get '/:page', (req, res) =>
 			#console.log 'page:', @pages[req.params.page] # TODO validation
-			if @pagesDirectory 
-				res.send require(@pagesDirectory+'/'+req.params.page+'.coffee').toHtml()
+			if @appDirectory 
+				pagePath = @pagesDirectory+'/'+req.params.page+'.coffee';
+				delete require.cache[require.resolve(pagePath)]
+				res.send require(pagePath).toHtml()
 			else
-				res.send @pages[req.params.page].toHtml()
-			
+				res.send @loadPage(req.params.page, req.query)
 
 		app.use express.static(__dirname + "/../")
+		app.use express.static(@appDirectory + '/public/')
+
 
 		app.get '/modules123/*', (req, res) =>
 			filePath = __dirname + '/../' + req._parsedUrl.pathname
