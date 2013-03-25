@@ -6,18 +6,22 @@ module.exports = class App
 	#
 	constructor: (data) ->
 		@pages = {}
+		@server = undefined
 		@startPage = data?.startPage || 'start'
 		if data?.directory
 			@appDirectory = data.directory
 			@pagesDirectory = data.directory + '/pages/'
 
-		console.log 'start app'
+	loadPage: (pageName, options) ->
+		@pages[pageName]
 
-	loadPage: (pageName) ->
-		@pages[pageName].toHtml()
-
-	loadRootPage: () ->
+	loadRootPage: (options) ->
+		# rewrite this
 		@loadPage(@startPage)
+
+	loadResource: (resourceName, options) ->
+		# rewrite this
+		@resources[resourceName]
 
 	start: (callback) ->
 		express = require 'express'
@@ -30,11 +34,11 @@ module.exports = class App
 
 		memoryModels = {}
 
-		for pageName, page of @pages
-			for type in page.getRequiredTypes()
-				memoryModels[type.name] = type.dbmodel
-
-		resourcesAdapter app: app, models: memoryModels
+		#for pageName, page of @pages
+		#	for type in page.getRequiredTypes()
+		#		memoryModels[type.name] = type.dbmodel
+        #
+		#resourcesAdapter app: app, models: memoryModels
 
 		app.get '/favicon.ico', (req, res) -> res.send()
 
@@ -42,36 +46,54 @@ module.exports = class App
 			res.send @loadRootPage(req.query)
 
 		app.get '/:page', (req, res) =>
-			#console.log 'page:', @pages[req.params.page] # TODO validation
-			if @appDirectory 
-				pagePath = @pagesDirectory+'/'+req.params.page+'.coffee';
-				delete require.cache[require.resolve(pagePath)]
-				res.send require(pagePath).toHtml()
-			else
-				res.send @loadPage(req.params.page, req.query)
+			pageName = req.params.page
+			options = req.query
+			res.send @loadPage(pageName, options).toHtml()
+
+
+		restApi = new RestApiRouter(@loadResource)
+		restApi.route(app)
 
 		app.use express.static(__dirname + "/../")
-		app.use express.static(@appDirectory + '/public/')
 
+		@server = app.listen 3000, callback
 
-		app.get '/modules123/*', (req, res) =>
-			filePath = __dirname + '/../' + req._parsedUrl.pathname
-			#console.log 'file path', filePath
+	stop: ->
+		@server.close()
 
-			fs.readFile filePath, 'utf8', (err, file) ->
-				switch path.extname(filePath)
-					when '.js' then res.set('Content-Type', 'text/javascript')
-					when '.css' then res.set('Content-Type', 'text/css')
-					when '.ttf' then res.set('Content-Type', 'application/x-font-ttf')
-					when '.woff' then res.set('Content-Type', 'application/octet-stream')
+	debug: (str) ->
+		console.log(str)
 
-				
-				if err then console.log(req, "ERROR", req.url)
-				
+class RestApiRouter
+	constructor: ( @loadResource ) ->
 
-				res.send file ? err
+	route: (app) ->
+		app.get     '/resource/:resource',     @getAll
+		app.get     '/resource/:resource/new', @getNew
+		app.get     '/resource/:resource/:id', @getById
+		app.post    '/resource/:resource',     @create
+		app.put     '/resource/:resource/:id', @updateById
+		app.delete  '/resource/:resource/:id', @deleteById
 
-		app.listen 3000, callback
+	getAll: (req, res)     => @runAction req, res, 'all' 
+	getNew: (req, res)     => @runAction req, res, 'new' 
+	getById: (req, res)    => @runAction req, res, 'get'
+	create: (req, res)     => @runAction req, res, 'create'
+	updateById: (req, res) => @runAction req, res, 'update'
+	deleteById: (req, res) => @runAction req, res, 'delete'
+
+	runAction: ( req, res, actionName ) ->
+		params =
+			id:   req.params.id
+			name: req.params.resource
+			options: req.query
+			data: req.body
+
+		resource = @loadResource( params.name, params.options )
+
+		console.log params.data
+
+		resource[actionName]( params, (data) -> res.send(data) )
 
 
 

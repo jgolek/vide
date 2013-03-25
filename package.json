@@ -16,7 +16,7 @@
 
   "devDependencies": {
   	"diff": "1.0.1",
-    "buster": "0.6.12",
-    "coffee-script": "1.6.1"
+    "coffee-script": "1.6.1",
+    "jasmine-node": "1.4.0"
   }
 }

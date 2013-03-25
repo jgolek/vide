@@ -1,18 +1,19 @@
-Widget = require './Widget'
-fs =  require 'fs'
-
-dox = require 'dox'
+fs           = require 'fs'
+dox          = require 'dox'
 coffeescript = require 'coffee-script'
+
+Widget       = require './Widget'
+
 
 module.exports =
 class FsWidget extends Widget
 	constructor: (data) ->
 		if(!data.directory) then throw new Error "directory isn't set"
+		
 		super(data)
-
-		viewfile = data.view || 'view'
-
 		@testdata = undefined
+
+		viewfile = data?.view ?= 'view'
 		@view = fs.readFileSync(data.directory + '/'+viewfile+'.html', 'utf8')
 
 		@loadJavaScript(data)

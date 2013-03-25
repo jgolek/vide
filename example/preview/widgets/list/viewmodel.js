@@ -9,12 +9,16 @@ function List(model){
 	self.items = model.items;
 }
 
-/** Testdata */
+/*****************
+ * Testdata 
+ * ***************
+ */
 {
 	items:  """js: 
 			[
 				{ name: 'test1' },
-				{ id: 1, name: 'test2' } 
+				{ id: 1, name: 'test2' },
+				{ id: 2, name: 'test3' } 
 			]
 			"""
 }

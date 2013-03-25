@@ -15,19 +15,18 @@ app.coffee
 	App = require 'vide'.App
 	app = new App
 
-	app.pages.login  = require './pages/login.coffee'
-	app.pages.main   = require './pages/main.coffee'
-
 	app.start ->
 		console.log "App started!"
 
 main.coffee
-
-	Page    = require '../../lib/Page'
+    vide    = require 'vide'
+	Page    = vide.Page
 	widgets = require '../widgets'
 	types   = require '../types'
 
 	page = new Page( name: 'start' )
+
+	page.helper = -> 
 
 	page.resource
 		name: "res1"
@@ -36,7 +35,9 @@ main.coffee
 
 	page.element 
 		name: "element1"
-		bind: widgets.Text.with("resource:res1")
+		bind: widgets.Text.with(
+				text: -> element1.test
+			)
 
 	module.exports = page
 
@@ -45,6 +46,7 @@ Run
 
 	coffee app.coffee
 
+	http://localhost:3000/
 
 Application
 ----------------------------

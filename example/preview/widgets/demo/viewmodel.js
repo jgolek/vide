@@ -13,5 +13,5 @@
  *****************************
  */
 {
-	name: 'js: ko.observable("halloWelt")'
+	name: 'js: ko.observable("halloWelt hallo marco")'
 }
